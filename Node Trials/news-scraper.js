@@ -6,16 +6,20 @@ function newsPCGamer(URL, articleCount) {
         if (!error && response.statusCode === 200) {
             const $ = cheerio.load(html)
 
-            console.log()
             $('.listingResult.small').each((i, elem) => {
-                console.log(++articleCount)
-                console.log($(elem).html().trim())
-                if (articleCount >= 50) return false
+                if (i > 0) {
+                    console.log('\n' + ++articleCount)
+                    console.log('Title: ' + $(elem).find('h3.article-name').text())
+                    console.log('Author: ' + $(elem).find('span.by-author').children().text().trim())
+                    console.log('Link: ' + $(elem).find('a.article-link').attr('href'))
+                    if (articleCount >= maxArticle) return false
+                }
             })
 
-            if (articleCount < 50) newsPCGamer($('link[rel=next]').attr('href'), articleCount);
+            if (articleCount < maxArticle) newsPCGamer($('link[rel=next]').attr('href'), articleCount);
         }
     })
 }
 
+const maxArticle = 50;
 newsPCGamer('https://www.pcgamer.com/news/', 0)
