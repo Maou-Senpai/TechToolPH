@@ -1,0 +1,10 @@
+#ingore .idea
+.idea/
+
+#ignore dependencies
+node_modules/
+
+#ingore dotenv environment variables
+.env
+
+
