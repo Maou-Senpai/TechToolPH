@@ -10,6 +10,12 @@ const newsSchema = new Schema({
     },
     link:{
         type: String
+    },
+    time:{
+        type: String
+    },
+    thumbnail:{
+        type: String
     }
 },{ collection: 'news' });
 

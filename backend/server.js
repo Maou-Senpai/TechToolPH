@@ -25,14 +25,17 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 //middleware
+// noinspection JSCheckFunctionSignatures
 app.use(cors());
 app.use(express.json());
-app.use('/build',buildRouter);
-app.use('/products',productRouter);
-app.use('/user',userRouter);
-app.use('/articles',newsRouter);
+
+app.use('/news', newsRouter);
+app.use('/build', buildRouter);
+app.use('/products', productRouter);
+app.use('/user', userRouter);
 
 //mongodb connection
+// noinspection JSUnresolvedVariable
 const uri = process.env.CONNECTION_URL;
 mongoose.connect(uri, { useNewUrlParser:true, useCreateIndex:true, useUnifiedTopology:true})
     .then(()=>app.listen(port, ()=> console.log(`Server running in ${port}`)))
@@ -42,7 +45,3 @@ mongoose.connect(uri, { useNewUrlParser:true, useCreateIndex:true, useUnifiedTop
 mongoose.connection.once('open',() => {
     console.log("MongoDB Database Connection Established.")
 })
-
-/*app.listen(port, ()=>{
-    console.log(`Server is running in ${port}`);
-})*/
