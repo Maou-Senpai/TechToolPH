@@ -5,12 +5,11 @@ const router = express.Router();
 
 import user from '../controllers/user.controller.js';
 
-
 /*router.get('/',(req,res)=>{
     res.send('tshi works@');
 });*/
 
-router.get('/',user.getUsers);
+router.get('/', user.getUsers);
 router.get('/:id',user.getUser);
 router.get('/builds/:id',user.getUserBuilds);
 router.delete('/delete/:id',user.deleteUser);

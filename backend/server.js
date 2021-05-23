@@ -18,13 +18,14 @@ import productRouter from './routes/product.js';
 import newsRouter from './routes/news.js';
 
 import dotenv from 'dotenv';
+
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 //middleware
-app.use(cors());
+app.use(cors);
 app.use(express.json());
 app.use('/build',buildRouter);
 app.use('/products',productRouter);
@@ -37,9 +38,9 @@ mongoose.connect(uri, { useNewUrlParser:true, useCreateIndex:true, useUnifiedTop
     .then(()=>app.listen(port, ()=> console.log(`Server running in ${port}`)))
     .catch((error)=>console.log(error.message));
 
-const connection = mongoose.connection;
-connection.once('open',()=>{
-    console.log("MongoDB database connection established.")
+// noinspection JSUnresolvedFunction
+mongoose.connection.once('open',() => {
+    console.log("MongoDB Database Connection Established.")
 })
 
 /*app.listen(port, ()=>{
