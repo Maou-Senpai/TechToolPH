@@ -49,7 +49,7 @@ function App() {
 
     return (
         <Router>
-            <UserContext.Provider value={{userData,setUserData}}>*/}
+            <UserContext.Provider value={{userData,setUserData}}>
             <Redirect from='/' to='news' />
             <div style={{display: "flex"}}>
                 <Navbar />
