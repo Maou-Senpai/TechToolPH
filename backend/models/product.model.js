@@ -10,7 +10,17 @@ const productSchema = new Schema({
         trim:true
     },
     price:{
-        type: Number,
+        type: String,
+        required:true,
+        trim:true
+    },
+    image:{
+        type: String,
+        required:true,
+        trim:true
+    },
+    type:{
+        type: String,
         required:true,
         trim:true
     }
@@ -18,7 +28,7 @@ const productSchema = new Schema({
     timestamps:true
 });
 
-const Product = mongoose.model('product',productSchema);
+const Product = mongoose.model('product', productSchema);
 
 //module.exports = Person;
 export default Product;

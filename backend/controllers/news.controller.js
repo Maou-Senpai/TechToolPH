@@ -1,5 +1,5 @@
 import News from '../models/news.model.js';
-import request from 'request';
+import fetch from 'node-fetch';
 import * as cheerio from 'cheerio';
 
 const getArticles =  (req,res)=>{
@@ -20,33 +20,40 @@ const clearNews =  (req,res)=>{
         .catch(err => res.status(400).json('Error :'+ err));
 };
 
+const scrapeNews = async (req, res) => {
+    const maxArticle = 50;
+    let articleCount = 0;
+    let url = 'https://www.pcgamer.com/news/';
 
-const scrapeNews = (req,res)=>{
-    request('https://www.pcgamer.com/news/', (error, response, html) => {
-        const maxArticle = 50;
-        let articleCount = 0;
-        if (!error && response.statusCode === 200) {
-            const $ = cheerio.load(html)
+    while (articleCount < maxArticle) {
+        const response = await fetch(url);
+        const body = await response.text();
+        const $ = await cheerio.load(body);
 
-            $('.listingResult.small').each((i, elem) => {
-                if (i > 0) {
-                    const title = $(elem).find('h3.article-name').text();
-                    const author = $(elem).find('span.by-author').children().text().trim();
-                    const link = $(elem).find('a.article-link').attr('href');
-                    const time = $(elem).find('time.published-date.relative-date').attr('datetime');
-                    const thumbnail = $(elem).find('div.image-remove-reflow-container.landscape').attr('data-original');
-                    const newArticle = new News({
-                        title, author, link, time, thumbnail
-                    })
-                    newArticle.save()
-                        .then(() => res.json('Articles Added!'))
-                        .catch(err => res.status(400).json('Error'+err));
+        $('.listingResult.small').each((i, elem) => {
+            if (i > 0) {
+                const title = $(elem).find('h3.article-name').text();
+                const author = $(elem).find('span.by-author').children().text().trim();
+                const link = $(elem).find('a.article-link').attr('href');
+                const time = $(elem).find('time.published-date.relative-date').attr('datetime');
+                const thumbnail = $(elem).find('div.image-remove-reflow-container.landscape').attr('data-original');
+                const newArticle = new News({
+                    title, author, link, time, thumbnail
+                })
+                newArticle.save()
+                    .then(() => console.log("Added " + title))
+                    .catch(() => console.log("Could not Add " + title));
+                articleCount++;
 
-                    if (articleCount >= maxArticle) return false
-                }
-            })
-        }
-    })
+                if (articleCount < maxArticle) url = $('link[rel=next]').attr('href');
+                else return false;
+            }
+        })
+
+        console.log(articleCount);
+    }
+
+    return res.json('Done');
 };
 
 export default {

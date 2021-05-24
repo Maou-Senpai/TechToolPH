@@ -38,7 +38,7 @@ app.use('/user', userRouter);
 // noinspection JSUnresolvedVariable
 const uri = process.env.CONNECTION_URL;
 mongoose.connect(uri, { useNewUrlParser:true, useCreateIndex:true, useUnifiedTopology:true})
-    .then(()=>app.listen(port, ()=> console.log(`Server running in ${port}`)))
+    .then(()=>app.listen(port, ()=> console.log(`Server Running in ${port}`)))
     .catch((error)=>console.log(error.message));
 
 // noinspection JSUnresolvedFunction

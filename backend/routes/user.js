@@ -6,13 +6,6 @@ import auth from "../middleware/auth.js";
 
 import user from '../controllers/user.controller.js';
 
-
-//router.get('/', user.getUsers);
-router.get('/:id',user.getUser);
-router.get('/builds/:id',user.getUserBuilds);
-router.delete('/delete/:id',user.deleteUser);
-
-
 //auth
 router.post('/signup',user.signup);
 router.post('/login',user.login);
@@ -26,6 +19,11 @@ router.get("/", auth, async (req, res) => {
         id: user._id,
     });
 });
+
+//router.get('/', user.getUsers);
+router.get('/:id',user.getUser);
+router.get('/builds/:id',user.getUserBuilds);
+router.delete('/delete/:id',user.deleteUser);
 
 //module.exports = router;
 export default router;

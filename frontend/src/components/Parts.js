@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import CreateIcon from '@material-ui/icons/Create';
 import SaveIcon from '@material-ui/icons/Save';
+import axios from 'axios';
+import {Save} from "@material-ui/icons";
+import SearchIcon from "@material-ui/icons/Search";
 
 export default class News extends Component {
     constructor(p) {
@@ -45,19 +48,15 @@ export default class News extends Component {
 
                 {/*Content*/}
                 <div className="container-fluid" style={{width: "100%"}}>
-                    {/*CPU*/}
-                    <Link to='/parts'>
+                    {/*Parts*/}
                     <div className="card shadow mb-4" style={{margin: "auto", width: "80%", textAlign: "center", padding: 30}}>
-                        <span style={{fontSize: 20, fontWeight: "bold"}}>CPU</span>
+                        <Link to='/parts' style={{fontSize: 20, fontWeight: "bold"}}>Part</Link>
                     </div>
-                    </Link>
-                    <div className="card shadow mb-4" style={{margin: "auto", width: "50%", textAlign: "center", padding: 30}}>
-                        <span style={{fontSize: 20, fontWeight: "bold"}}>CPU</span>
-                    </div>
-
-                    {/*GPU*/}
                     <div className="card shadow mb-4" style={{margin: "auto", width: "80%", textAlign: "center", padding: 30}}>
-                        <span style={{fontSize: 20, fontWeight: "bold"}}>GPU</span>
+                        <Link to='/parts' style={{fontSize: 20, fontWeight: "bold"}}>Part</Link>
+                    </div>
+                    <div className="card shadow mb-4" style={{margin: "auto", width: "80%", textAlign: "center", padding: 30}}>
+                        <Link to='/parts' style={{fontSize: 20, fontWeight: "bold"}}>Part</Link>
                     </div>
                 </div>
             </div>

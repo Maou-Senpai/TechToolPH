@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import GavelIcon from '@material-ui/icons/Gavel';
 import InboxIcon from '@material-ui/icons/Inbox';
-import SettingsIcon from '@material-ui/icons/Settings';
+// import SettingsIcon from '@material-ui/icons/Settings';
 import AuthOptions from "../components/Auth/Auth";
 
 export default class Navbar extends Component {
@@ -36,12 +36,12 @@ export default class Navbar extends Component {
                         <span style={{margin: 30}}>My Builds</span>
                     </Link>
                 </li>
-                <li className="nav-item" style={{marginLeft: 10}}>
-                    <Link to="/admin-settings" className="nav-link">
-                        <SettingsIcon />
-                        <span style={{margin: 30}}>Admin Settings</span>
-                    </Link>
-                </li>
+                {/*<li className="nav-item" style={{marginLeft: 10}}>*/}
+                {/*    <Link to="/admin-settings" className="nav-link">*/}
+                {/*        <SettingsIcon />*/}
+                {/*        <span style={{margin: 30}}>Admin Settings</span>*/}
+                {/*    </Link>*/}
+                {/*</li>*/}
                 <AuthOptions/>
             </ul>
         )
