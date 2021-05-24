@@ -14,10 +14,6 @@ const userSchema = new Schema({
         required:true,
         trim:true
     },
-    builds:{
-        type: [String],
-        trim:true
-    }
 },{
     timestamps:true
 });

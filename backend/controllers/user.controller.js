@@ -11,7 +11,7 @@ const getUsers = (req,res)=>{
 };
 
 const getUser =  (req,res)=>{
-    User.findById(req.params.id)
+    User.findById(req.user)
         .then(user => res.json(user))
         .catch(err => res.status(400).json('Error :' + err));
 };
@@ -49,7 +49,8 @@ const login =  async (req, res) => {
         res.json({
             token,
             user: {
-                id: user._id
+                id: user._id,
+                username: user.username
             },
         });
     } catch (err) {

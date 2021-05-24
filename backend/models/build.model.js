@@ -24,6 +24,10 @@ const buildSchema = new Schema({
     memory:{
         type: String,
         trim:true
+    },
+    userId:{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }
 },{
     timestamps:true

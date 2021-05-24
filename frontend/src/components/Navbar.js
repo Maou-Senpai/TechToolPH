@@ -4,11 +4,14 @@ import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import GavelIcon from '@material-ui/icons/Gavel';
 import InboxIcon from '@material-ui/icons/Inbox';
 import SettingsIcon from '@material-ui/icons/Settings';
+import AuthOptions from "../components/Auth/Auth";
 
 export default class Navbar extends Component {
+
     render() {
         return(
             <ul id="sidebar" className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion">
+
                 <Link to="/news" className="sidebar-brand d-flex align-items-center justify-content-center">
                     <div className="sidebar-brand-text mx-3">TechToolPH</div>
                 </Link>
@@ -39,6 +42,7 @@ export default class Navbar extends Component {
                         <span style={{margin: 30}}>Admin Settings</span>
                     </Link>
                 </li>
+                <AuthOptions/>
             </ul>
         )
     }
