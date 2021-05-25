@@ -1,188 +1,67 @@
 // let Product = require('../models/product.model');
 
 import Product from '../models/product.model.js';
-import request from 'request';
+import fetch from 'node-fetch';
 import * as cheerio from 'cheerio';
 
-const getProducts =  (req,res)=>{
-    Product.find()
+const getProducts =  (req, res) => {
+    Product.find({"type": {$regex: req.params["productType"]}})
         .then(product => res.json(product))
-        .catch(err => res.status(400).json('Error :'+ err));
+        .catch(() => res.json('Cannot Find Products'));
+    return res;
 };
 
-const getProduct = (req,res)=>{
-    Product.findById(req.params.id)
-        .then(product => res.json(product))
-        .catch(err => res.status(400).json('Error :' + err));
-};
-
-const deleteProduct = (req,res)=>{
+async function scrapeDynaQuest() {
     Product.deleteMany({})
-        .then(news => res.json(news))
-        .catch(err => res.status(400).json('Error :'+ err));
-};
+        .then(() => console.log("Collection Cleared"))
+        .catch(() => console.log("Collection Failed to Clear"));
 
-const addProduct = (req,res) => {
-    var options = {
-        headers: {'user-agent': 'node.js'}
+    let pages = {
+        cpu: 'https://dynaquestpc.com/collections/processor?page=',
+        gpu: 'https://dynaquestpc.com/collections/graphics-card?page=',
+        motherboard: 'https://dynaquestpc.com/collections/motherboard?page=',
+        ram: 'https://dynaquestpc.com/collections/memory?page=',
+        storage: 'https://dynaquestpc.com/collections/hard-drive?page=',
+        psu: 'https://dynaquestpc.com/collections/power-supply?page=',
+        case: 'https://dynaquestpc.com/collections/chassis?page='
     }
+    let response, body, $;
+    const baseURL = 'https://dynaquestpc.com';
 
-    for(let i=1; i<3; i++){
-            request('https://dynaquestpc.com/collections/processor?page=' + i, options, function(error, response, html){
-            if(!error && response.statusCode === 200){
-                const $ = cheerio.load(html)
-                console.log(html);
-                $('.row-container.list-unstyled.clearfix').each((i,el) => {
-                    let product = $(el).find('.title-5');
-                    product = product.text().replace(/\s\s+/g, "")
-                    console.log(product);
-                    let price = $(el).find('.price');
-                    price = price.text().replace("₱", "").replace(/\s\s+/g, "");
-                    let image = $(el).find('img');
-                    image = image.attr('src').replace(/\s\s+/g, "");
+    for (const value of Object.entries(pages)) {
+        let i = 0;
+        do {
+            response = await fetch(value[1] + ++i).then(res => res);
+            body = await response.text();
+            $ = await cheerio.load(body);
 
-                    const type = "cpu";
-                    const newProduct = new Product({
-                        product, price, image, type
-                    });
+            $('div.row-container.list-unstyled.clearfix').each((i, el) => {
+                const item_name = $(el).find('.title-5').text();
+                const price = $(el).find('.price').text().replace("₱", "");
+                const image = $(el).find('img')[0].attribs.src;
+                const link = baseURL + $(el).find('.title-5')[0].attribs.href;
 
-                    newProduct.save()
-                        .then(() => res.json('New Product Added!'))
-                        .catch(err => res.status(400).json('Error' + err));
+                const type = value[0];
+                const newProduct = new Product({
+                    item_name, price, image, type, link
                 });
-            }
-        });
-    }
 
-    // for(let i=1; i<11; i++) {
-    //     request('https://dynaquestpc.com/collections/motherboard?page=' + i, options, function(error, response, html){
-    //         if(!error && response.statusCode == 200){
-    //             const $ = cheerio.load(html)
-    //             $('.row-container.list-unstyled.clearfix').each((i,el) => {
-    //                 let product = $(el).find('.title-5');
-    //                 product = product.text().replace(/\s\s+/g, "")
-    //                 let price = $(el).find('.price');
-    //                 price = price.text().replace("₱", "").replace(/\s\s+/g, "");
-    //                 let image = $(el).find('img');
-    //                 image = image.attr('src').replace(/\s\s+/g, "");
-    //
-    //                 const type = "motherboard";
-    //                 const newProduct = new Product({
-    //                     product, price, image, type
-    //                 });
-    //
-    //                 newProduct.save()
-    //                     .then(() => res.json('New Product added!'))
-    //                     .catch(err => res.status(400).json('Error'+err));
-    //             });
-    //         }
-    //     });
-    // }
-    //
-    // for(let i=1; i<4; i++){
-    //     request('https://dynaquestpc.com/collections/graphics-card?page=' + i, options, function(error, response, html){
-    //         if(!error && response.statusCode == 200){
-    //             const $ = cheerio.load(html)
-    //             $('.row-container.list-unstyled.clearfix').each((i,el) => {
-    //                 let product = $(el).find('.title-5');
-    //                 product = product.text().replace(/\s\s+/g, "")
-    //                 let price = $(el).find('.price');
-    //                 price = price.text().replace("₱", "").replace(/\s\s+/g, "");
-    //                 let image = $(el).find('img');
-    //                 image = image.attr('src').replace(/\s\s+/g, "");
-    //
-    //                 const type = "gpu";
-    //                 const newProduct = new Product({
-    //                     product, price, image, type
-    //                 });
-    //
-    //                 newProduct.save()
-    //                     .then(() => res.json('New Product added!'))
-    //                     .catch(err => res.status(400).json('Error'+err));
-    //             });
-    //         }
-    //     });
-    // }
-    //
-    // for(let i=1; i<7; i++){
-    //     request('https://dynaquestpc.com/collections/memory?page=' + i, options, function(error, response, html){
-    //         if(!error && response.statusCode == 200){
-    //             const $ = cheerio.load(html)
-    //             $('.row-container.list-unstyled.clearfix').each((i,el) => {
-    //                 let product = $(el).find('.title-5');
-    //                 product = product.text().replace(/\s\s+/g, "")
-    //                 let price = $(el).find('.price');
-    //                 price = price.text().replace("₱", "").replace(/\s\s+/g, "");
-    //                 let image = $(el).find('img');
-    //                 image = image.attr('src').replace(/\s\s+/g, "");
-    //
-    //                 const type = "ram";
-    //                 const newProduct = new Product({
-    //                     product, price, image, type
-    //                 });
-    //
-    //                 newProduct.save()
-    //                     .then(() => res.json('New Product added!'))
-    //                     .catch(err => res.status(400).json('Error'+err));
-    //             });
-    //         }
-    //     });
-    // }
-    //
-    // for(let i=1; i<8; i++){
-    //     request('https://dynaquestpc.com/collections/power-supply?page=' + i, options, function(error, response, html){
-    //         if(!error && response.statusCode == 200){
-    //             const $ = cheerio.load(html)
-    //             $('.row-container.list-unstyled.clearfix').each((i,el) => {
-    //                 let product = $(el).find('.title-5');
-    //                 product = product.text().replace(/\s\s+/g, "")
-    //                 let price = $(el).find('.price');
-    //                 price = price.text().replace("₱", "").replace(/\s\s+/g, "");
-    //                 let image = $(el).find('img');
-    //                 image = image.attr('src').replace(/\s\s+/g, "");
-    //
-    //                 const type = "psu";
-    //                 const newProduct = new Product({
-    //                     product, price, image, type
-    //                 });
-    //
-    //                 newProduct.save()
-    //                     .then(() => res.json('New Product added!'))
-    //                     .catch(err => res.status(400).json('Error'+err));
-    //             });
-    //         }
-    //     });
-    // }
-    //
-    // for(let i=1; i<8; i++){
-    //     request('https://dynaquestpc.com/collections/hard-drive?page=' + i, options, function(error, response, html){
-    //         if(!error && response.statusCode == 200){
-    //             const $ = cheerio.load(html)
-    //             $('.row-container.list-unstyled.clearfix').each((i,el) => {
-    //                 let product = $(el).find('.title-5');
-    //                 product = product.text().replace(/\s\s+/g, "")
-    //                 let price = $(el).find('.price');
-    //                 price = price.text().replace("₱", "").replace(/\s\s+/g, "");
-    //                 let image = $(el).find('img');
-    //                 image = image.attr('src').replace(/\s\s+/g, "");
-    //
-    //                 const type = "storage";
-    //                 const newProduct = new Product({
-    //                     product, price, image, type
-    //                 });
-    //
-    //                 newProduct.save()
-    //                     .then(() => res.json('New Product Added!'))
-    //                     .catch(err => res.status(400).json('Error'+err));
-    //             });
-    //         }
-    //     });
-    // }
+                newProduct.save()
+                    .then(() => console.log("Added: " + item_name))
+                    .catch(() => console.log("Not Added: " + item_name));
+            });
+        } while ($('link[rel=next]').length > 0);
+    }
+}
+
+const addProduct = (req, res) => {
+    Promise.all([scrapeDynaQuest()])
+        .then(() => res.json("Done").send)
+        .catch(() => res.json("Error"));
+    return res;
 };
 
 export default {
     getProducts,
-    getProduct,
-    deleteProduct,
     addProduct,
 }

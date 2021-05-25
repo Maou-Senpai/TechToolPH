@@ -57,7 +57,6 @@ function App() {
                 <Route path="/register" component={Register} />
                 <Route path='/news' component={News} />
                 <Route path='/build-pc' component={BuildAPC} />
-                <Route path='/parts' component={BuildAPC} />
                 <Route path='/my-builds' component={MyBuilds} />
                 <Route path='/admin-settings' component={Admin} />
             </div>

@@ -7,10 +7,8 @@ import product from '../controllers/product.controller.js';
 
 //const product = require('../controllers/product.controller');
 
-router.get('/', product.getProducts);
 router.get('/scrape', product.addProduct);
-router.get('/delete',product.deleteProduct);
-router.get('/:id', product.getProduct);
+router.get('/:productType', product.getProducts);
 
 //module.exports = router;
 export default router;

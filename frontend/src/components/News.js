@@ -57,37 +57,31 @@ export default class News extends Component {
                     {/*Left*/}
                     <div style={{width: "49%", float: "left"}}>
                         {this.state.loaded ? this.state.news.filter((val) =>{
-                            if (this.state.searchTerm === ""){
-                                return val;
-                            }
-                            else if (val.title.toLowerCase().includes(this.state.searchTerm.toLowerCase())){
-                                return val;
-                            }
+                            return ((this.state.searchTerm === "") ||
+                                (val.title.toLowerCase().includes(this.state.searchTerm.toLowerCase())))
                         }).map((val, idx) => {
-                            if (idx % 2 === 0) return <a target="_blank" href={val.link}>
+                            if (idx % 2 === 0) return <a target="_blank" href={val.link} rel="noreferrer">
                                 <div className="card shadow mb-4" style={{alignItems: "center", textAlign: "center", padding: 30}}>
                                     <img src={val.thumbnail} style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
                                     <span style={{fontSize: 20, fontWeight: "bold"}}>{val.title}</span>
                                 </div>
                             </a>
+                            else return null;
                         }) : null}
                     </div>
                     {/*Right*/}
                     <div style={{width: "49%", float: "right"}}>
                         {this.state.loaded ? this.state.news.filter((val) =>{
-                            if (this.state.searchTerm === ""){
-                                return val;
-                            }
-                            else if (val.title.toLowerCase().includes(this.state.searchTerm.toLowerCase())){
-                                return val;
-                            }
+                            return ((this.state.searchTerm === "") ||
+                                (val.title.toLowerCase().includes(this.state.searchTerm.toLowerCase())))
                         }).map((val, idx) => {
-                            if (idx % 2 !== 0) return <a target="_blank" href={val.link}>
+                            if (idx % 2 !== 0) return <a target="_blank" href={val.link} rel="noreferrer">
                                 <div className="card shadow mb-4" style={{alignItems: "center", textAlign: "center", padding: 30}}>
                                     <img src={val.thumbnail} style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
                                     <span style={{fontSize: 20, fontWeight: "bold"}}>{val.title}</span>
                                 </div>
                             </a>
+                            else return null;
                         }) : null}
                     </div>
                 </div>

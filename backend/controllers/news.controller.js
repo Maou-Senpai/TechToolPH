@@ -14,14 +14,13 @@ const getArticle =  (req,res)=>{
         .catch(err => res.status(400).json('Error :'+ err));
 };
 
-const clearNews =  (req,res)=>{
-    News.deleteMany({})
-        .then(news => res.json(news))
-        .catch(err => res.status(400).json('Error :'+ err));
-};
-
 const scrapeNews = async (req, res) => {
-    const maxArticle = 50;
+    // Clear Database
+    News.deleteMany({})
+        .then(() => console.log("Collection Cleared"))
+        .catch(() => console.log("Collection Failed to Clear"));
+
+    const maxArticle = 150;
     let articleCount = 0;
     let url = 'https://www.pcgamer.com/news/';
 
@@ -60,5 +59,4 @@ export default {
     scrapeNews,
     getArticles,
     getArticle,
-    clearNews
 }
