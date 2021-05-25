@@ -37,3 +37,6 @@ Version | Primary Author(s) | Description of Version | Date Completed
 * Graduated Senior High School in DLSU Integrated School
 * Currently Studying Computer Engineering in De La Salle University
 * Likes Formula 1
+
+## Dave Galamgam
+* Likes 
