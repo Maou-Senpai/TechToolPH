@@ -2,6 +2,7 @@ import express from 'express';
 const router = express.Router();
 import jwt from "jsonwebtoken";
 import auth from "../middleware/auth.js";
+import User from '../models/user.model.js';
 
 
 import user from '../controllers/user.controller.js';

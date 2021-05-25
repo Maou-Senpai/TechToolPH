@@ -2,7 +2,12 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/user.model.js';
 import jwt from "jsonwebtoken";
+import Build from '../models/build.model.js';
 import auth from "../middleware/auth.js";
+
+
+
+
 
 const getUsers = (req,res)=>{
     User.find()
@@ -22,9 +27,11 @@ const deleteUser = (req,res)=>{
         .catch(err => res.status(400).json('Error :'+ err));
 };
 
+
 const getUserBuilds = (req,res)=>{
-    User.find()
-        .then(user => res.json(user.builds))
+    Build.find({userId: req.params.id})
+        .sort({updatedAt: -1})
+        .then(builds => res.json(builds))
         .catch(err => res.status(400).json('Error :'+ err));
 };
 
