@@ -29,7 +29,7 @@ Version | Primary Author(s) | Description of Version | Date Completed
 0.2.1 | Dave Galamgam, Edric Hao, Ira Ungos | Revised the document based on feedback | 03/28/2021
 0.3 | Dave Galamgam, Edric Hao, Ira Ungos | Revised the document based on feedback. Added initial UI design. | 03/29/2021
 0.4 | Dave Galamgam, Edric Hao, Ira Ungos | Added Metrics  | 04/19/2021
-0.5 | Dave Galamgam, Edric Hao, Ira Ungos | Metrics measurement  | Updated Appendix B (Group log and software metrics | 05/25/2021
+0.5 | Dave Galamgam, Edric Hao, Ira Ungos | Metrics measurement. Updated Appendix B (Group log and software metrics | 05/25/2021
 
 # Information About Contributors
 ## Ira Ungos
