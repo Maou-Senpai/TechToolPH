@@ -2,13 +2,12 @@
 
 import Build from '../models/build.model.js';
 
-const getuserBuilds = (req,res)=>{
+const getUserBuilds = (req, res)=>{
     Build.find({userId: req.params.id})
         .sort({updatedAt: -1})
         .then(builds => res.json(builds))
         .catch(err => res.status(400).json('Error :'+ err));
 };
-
 
 const getBuilds = (req,res)=>{
     Build.find()
@@ -28,25 +27,30 @@ const deleteBuild = (req,res)=>{
         .catch(err => res.status(400).json('Error :'+ err));
 };
 
-const addBuild = (req,res)=>{
-    const build_name = req.body.build_name;
-    const processor = req.body.processor;
-    const graphics_card = req.body.graphics_card;
-    const motherboard = req.body.motherboard;
-    const memory = req.body.memory;
-    const userId = req.body.userId;
+const addBuild = (req, res) => {
+    const build_name = req.body[0];
+    const build = req.body[1];
+    console.log(build_name);
 
     const newBuild = new Build({
-        build_name,processor,graphics_card,motherboard,memory,userId
+        build_name, build
     });
 
     newBuild.save()
-        .then(build => res.json('New record added!'))
-        .catch(err => res.status(400).json('Error'+err));
+        .then(() => {
+            res.json("Added Build");
+            console.log("Added Build");
+        })
+        .catch((e) => {
+            console.log(e);
+            res.status(500);
+        });
+
+    return res;
 };
 
 export default {
-    getuserBuilds,
+    getUserBuilds,
     getBuilds,
     getBuild,
     deleteBuild,

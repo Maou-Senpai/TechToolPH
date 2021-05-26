@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SaveIcon from '@material-ui/icons/Save';
 import AddIcon from '@material-ui/icons/Add';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import DeleteIcon from '@material-ui/icons/Delete';
 import {Button} from "@material-ui/core";
 import axios from "axios";
 
@@ -21,6 +22,7 @@ export default class BuildAPC extends Component {
             build: "",
             currentPage: "home",
             loadedProducts: null,
+            total: 0,
             catalog: {
                 cpu: [],
                 gpu: [],
@@ -33,6 +35,7 @@ export default class BuildAPC extends Component {
         }
 
         this.rename = this.rename.bind(this);
+        this.save = this.save.bind(this);
         this.changeToProducts = this.changeToProducts.bind(this);
         this.changeToHome = this.changeToHome.bind(this);
     }
@@ -41,6 +44,13 @@ export default class BuildAPC extends Component {
         this.setState({
             build: event.target.value
         });
+    }
+
+    save() {
+        console.log("hello");
+        let baseUrl = process.env.baseURL || "http://localhost:5000";
+        axios.post(baseUrl + "/build/add", [this.state.build, this.state.catalog])
+            .then((res) => console.log(res));
     }
 
     changeToProducts(e) {
@@ -57,13 +67,11 @@ export default class BuildAPC extends Component {
     }
 
     changeToHome(e) {
-        let selected = this.state.loadedProducts[e.currentTarget.value];
-        let tempCat = this.state.catalog;
-        tempCat[selected["type"]].push(selected["item_name"]);
-        console.log(this.state.catalog)
+        const selected = JSON.parse(e.currentTarget.value);
+        this.state.catalog[selected["type"]].push(selected);
         this.setState({
             currentPage: "home",
-            // catalog[selected.type]: "hello"
+            total: this.state.total + parseFloat(selected["price"].replace(",", ""))
         })
     }
 
@@ -77,12 +85,14 @@ export default class BuildAPC extends Component {
                             <input className="form-control bg-light border-0 small" type="text"
                                    placeholder="Untitled Build" onChange={this.rename}/>
                             <div className="input-group-append">
-                                <button type="button" style={{border: "none", backgroundColor: "transparent", marginLeft: 15}}>
+                                <button type="button" onClick={this.save} style={{border: "none",
+                                    backgroundColor: "transparent", marginLeft: 15}}>
                                     <SaveIcon />
                                 </button>
                             </div>
                         </div>
                     </form>
+                    <h3 style={{margin: 0}}>{this.state.total}</h3>
                 </nav>
 
                 {/*Content*/}
@@ -92,8 +102,8 @@ export default class BuildAPC extends Component {
                             <div>
                                 {/*Product Type*/}
                                 <div className="card shadow mb-4" style={{margin: "auto", width: "90%", padding: 30}}>
-                                    <span style={{fontSize: 20, fontWeight: "bold", width: "100%", paddingLeft: "1%"}}>
-                                        {val[1]}
+                                    <span style={{fontSize: 20, fontWeight: "bold", width: "100%", display: "flex"}}>
+                                        <p style={{margin: 0, float: "left", alignSelf: "center", width: "100%"}}>{val[1]}</p>
                                         <Button value={val[0]} onClick={this.changeToProducts} style={{float: "right"}}>
                                             <AddIcon />
                                         </Button>
@@ -103,8 +113,17 @@ export default class BuildAPC extends Component {
                                 {/*Product Name*/}
                                 {this.state.catalog[val[0]].map(spec => {
                                     return (
-                                        <div className="card shadow mb-4" style={{margin: "auto", width: "70%", textAlign: "center", padding: 30}}>
-                                            <span style={{fontSize: 20}}>{spec}</span>
+                                        <div className="card shadow mb-4"
+                                            style={{margin: "auto", width: "70%", textAlign: "center", padding: 30}}>
+                                            <span style={{display: "flex"}}>
+                                                <a style={{fontSize: 20, width: "70%", alignSelf: "center",
+                                                    textAlign: "left", display: "flex", float: "left"}}
+                                                   href={spec["link"]}>{spec["item_name"]}</a>
+                                                <h2 style={{width: "25%", margin: 0, alignSelf: "center"}}>{spec["price"]}</h2>
+                                                <Button>
+                                                    <DeleteIcon />
+                                                </Button>
+                                            </span>
                                         </div>
                                     )
                                 })}
@@ -144,7 +163,6 @@ export default class BuildAPC extends Component {
             // Content
             <div className="container-fluid" style={{width: "100%"}}>
                 {Object.entries(this.state.loadedProducts).map((val) => {
-                    console.log(val[0])
                     return (
                         <div className="card shadow mb-4" style={{margin: "auto", width: "90%", padding: 30}}>
                             <span style={{height: "min-content", display: "flex", alignItems: "center"}}>
@@ -153,7 +171,7 @@ export default class BuildAPC extends Component {
                                     {val[1]["item_name"]}
                                 </a>
                                 <span style={{width: "20%"}} />
-                                <Button value={val[0]} onClick={this.changeToHome} style={{float: "right", width: 10}}>
+                                <Button value={JSON.stringify(val[1])} onClick={this.changeToHome} style={{float: "right", width: 10}}>
                                     <AddShoppingCartIcon />
                                 </Button>
                             </span>
