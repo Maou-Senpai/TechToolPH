@@ -185,7 +185,8 @@ export default class BuildAPC extends Component {
                         <div className="input-group">
                             <input className="form-control bg-light border-0 small" type="text" style={{maxWidth: "20%"}}
                                    placeholder="Enter Keyword" onChange={this.rename}/>
-                            <div className="input-group-append" style={{width: "80%"}}>
+
+                           <div className="input-group-append" style={{width: "20%"}}>
                                 <input />
                             </div>
                         </div>

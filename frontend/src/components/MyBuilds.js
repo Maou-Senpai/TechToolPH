@@ -74,7 +74,7 @@ export default class MyBuild extends Component {
             data = false;
         }
         return (
-            <div className='MyBuilds text-center'>
+            <div className='MyBuilds text-center' style={{marginLeft: "14rem"}}>
                 {data?(<div>
                 <h1>My Builds</h1>
                 <table className="table table-bordered table-hover">
