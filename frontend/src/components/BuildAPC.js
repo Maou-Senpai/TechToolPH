@@ -5,6 +5,26 @@ import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {Button} from "@material-ui/core";
 import axios from "axios";
+import checkLoggedIn from "./Auth/UserAuth";
+import { Redirect } from 'react-router-dom';
+
+const initialState = {
+    build: "",
+    currentPage: "home",
+    loadedProducts: null,
+    total: 0,
+    catalog: {
+        cpu: [],
+        gpu: [],
+        motherboard: [],
+        ram: [],
+        storage: [],
+        psu: [],
+        case: []
+    },
+    userId: "",
+    buildId: undefined
+}
 
 export default class BuildAPC extends Component {
     partsType = {
@@ -18,27 +38,44 @@ export default class BuildAPC extends Component {
 
     constructor(p) {
         super(p);
-        this.state = {
-            build: "",
-            currentPage: "home",
-            loadedProducts: null,
-            total: 0,
-            catalog: {
-                cpu: [],
-                gpu: [],
-                motherboard: [],
-                ram: [],
-                storage: [],
-                psu: [],
-                case: []
-            }
-        }
+        this.state = initialState;
 
         this.rename = this.rename.bind(this);
         this.save = this.save.bind(this);
         this.changeToProducts = this.changeToProducts.bind(this);
         this.changeToHome = this.changeToHome.bind(this);
     }
+
+    componentDidMount() {
+        (async()=>{
+            const data = await checkLoggedIn();
+            console.log(data);
+
+            this.state.userId = data.user.id;
+        })();
+
+        console.log("did");
+        console.log(this.props.match.params);
+        if(this.props.match.params){
+            axios.get('http://localhost:5000/build/'+this.props.match.params.id)
+                .then(res=>{
+                    this.setState({
+                        build: res.data.build_name,
+                        catalog: res.data.build,
+                        userId: res.data.userId,
+                        buildId: res.data._id
+                    })
+                })
+                .catch(err=>console.log(err));
+        }
+    }
+
+
+    componentWillUnmount() {
+        console.log("hello");
+        this.setState(initialState);
+    }
+
 
     rename(event) {
         this.setState({
@@ -49,8 +86,25 @@ export default class BuildAPC extends Component {
     save() {
         console.log("hello");
         let baseUrl = process.env.baseURL || "http://localhost:5000";
-        axios.post(baseUrl + "/build/add", [this.state.build, this.state.catalog])
-            .then((res) => console.log(res));
+        if(this.props.match.params.id){
+            axios.post(baseUrl+"/build/update/"+this.props.match.params.id,[this.state.build,this.state.catalog,this.state.userId])
+                .then((res)=>console.log(res));
+
+        }
+        else {
+            if(localStorage.getItem('auth-token')!=="") {
+                axios.post(baseUrl + "/build/add", [this.state.build, this.state.catalog, this.state.userId])
+                    .then((res) => {
+                        console.log(res);
+                        this.state.buildId = res.data._id;
+                        console.log(this.state.buildId);
+                        window.location = "/build-pc/"+res.data._id;
+                    });
+            }
+            else{
+                console.log("Login first")
+            }
+        }
     }
 
     changeToProducts(e) {

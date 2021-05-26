@@ -30,15 +30,16 @@ const deleteBuild = (req,res)=>{
 const addBuild = (req, res) => {
     const build_name = req.body[0];
     const build = req.body[1];
+    const userId = req.body[2];
     console.log(build_name);
 
     const newBuild = new Build({
-        build_name, build
+        build_name, build,userId
     });
 
     newBuild.save()
-        .then(() => {
-            res.json("Added Build");
+        .then((result) => {
+            res.json(result);
             console.log("Added Build");
         })
         .catch((e) => {

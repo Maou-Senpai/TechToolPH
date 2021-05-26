@@ -1,11 +1,15 @@
-import React,{useContext,Component} from 'react';
-import UserContext from "../components/context/UserContext";
-import {BrowserRouter as Router, Link} from "react-router-dom";
+import React,{Component} from 'react';
+
+import { Link} from "react-router-dom";
 import axios from 'axios';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
-import jwtdecode from 'jwt-decode';
+
+//import UserContext from "../components/context/UserContext";
+//import jwtdecode from 'jwt-decode';
+
+import checkLoggedIn from "./Auth/UserAuth";
 
 const Build = props => {
     return(
@@ -13,7 +17,7 @@ const Build = props => {
             <td>{props.build.build_name}</td>
             <td>{props.build.updatedAt}</td>
             <td className="text-center">
-                <Link to={'/edit/'+props.build._id} className="btn btn-sm btn-primary">Edit</Link>
+                <Link to={'/build-pc/'+props.build._id} className="btn btn-sm btn-primary">Edit</Link>
                 <a href="#" onClick={()=>{props.deletebuild(props.build._id)}} className="btn btn-sm btn-danger">Delete</a>
             </td>
         </tr>
@@ -29,19 +33,22 @@ export default class MyBuild extends Component {
     }
 
     componentDidMount() {
-        const token = localStorage.getItem("auth-token");
-        if(token!="" && token!=null) {
-            const data = jwtdecode(token);
-            console.log(JSON.stringify(data.id));
+        (async()=>{
+            const data = await checkLoggedIn();
+            console.log(data);
 
-            axios.get('http://localhost:5000/user/builds/' + data.id)
-                .then(res => {
-                    this.setState({build: res.data})
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-        }
+            if(data.token != "") {
+                axios.get('http://localhost:5000/user/builds/' + data.user.id)
+                    .then(res => {
+                        this.setState({build: res.data})
+                        console.log(res.data);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            }
+        })();
+
     }
 
     deletebuild(id){
