@@ -3,10 +3,12 @@ import SaveIcon from '@material-ui/icons/Save';
 import AddIcon from '@material-ui/icons/Add';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {Button} from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
 import axios from "axios";
 import checkLoggedIn from "./Auth/UserAuth";
 import '../resources/BuildAPC.css';
+
+import {Autocomplete} from "@material-ui/lab";
 
 const initialState = {
     build: "",
@@ -23,7 +25,13 @@ const initialState = {
         case: []
     },
     userId: "",
-    buildId: undefined
+    buildId: undefined,
+    gpuBench: {},
+    cpuBench: {},
+    gpuOptions: [],
+    cpuOptions: [],
+    benchOne: null,
+    benchTwo: null
 }
 
 export default class BuildAPC extends Component {
@@ -34,17 +42,37 @@ export default class BuildAPC extends Component {
         ram: "RAM",
         storage: "Storage",
         psu: "PSU",
-        case: "Case"
+        case: "Case",
     }
 
     constructor(p) {
         super(p);
         this.state = initialState;
+        for (let part of Object.entries(this.state.catalog)) {
+            this.state.catalog[part[0]] = [];
+        }
 
         this.rename = this.rename.bind(this);
         this.save = this.save.bind(this);
         this.changeToProducts = this.changeToProducts.bind(this);
         this.changeToHome = this.changeToHome.bind(this);
+        this.delete = this.delete.bind(this);
+        this.getBenchOne = this.getBenchOne.bind(this);
+        this.getBenchTwo = this.getBenchTwo.bind(this);
+
+        axios.get("http://localhost:5000/benchmarks/gpu").then(res => {
+            for (let bench of res.data) {
+                this.state.gpuBench[bench.item] = bench.score;
+                this.state.gpuOptions.push(bench);
+            }
+        })
+
+        axios.get("http://localhost:5000/benchmarks/cpu").then(res => {
+            for (let bench of res.data) {
+                this.state.cpuBench[bench.item] = bench.score;
+                this.state.cpuOptions.push(bench);
+            }
+        })
     }
 
     componentDidMount() {
@@ -83,19 +111,25 @@ export default class BuildAPC extends Component {
         this.setState(initialState);
     }
 
-    createTwoButtonAlert() {
-
-    }
-
     rename(event) {
         this.setState({
             build: event.target.value
         });
     }
 
-    save() {
-        console.log(localStorage.user);
+    delete(event) {
+        const selected = JSON.parse(event.currentTarget.value)
+        const temp = this.state.catalog;
+        temp[selected["type"]] = this.state.catalog[selected["type"]].filter(val => {
+            return val["_id"] !== selected ["_id"];
+        })
+        this.setState({
+            catalog: temp,
+            total: this.state.total - selected["price"].replace(',', '')
+        })
+    }
 
+    save() {
         let baseUrl = process.env.baseURL || "http://localhost:5000";
         if(this.props.match.params.id){
             axios.post(baseUrl+"/build/update/"+this.props.match.params.id,[this.state.build,this.state.catalog,this.state.userId])
@@ -136,8 +170,51 @@ export default class BuildAPC extends Component {
         this.state.catalog[selected["type"]].push(selected);
         this.setState({
             currentPage: "home",
-            total: this.state.total + parseFloat(selected["price"].replace(",", ""))
+            total: this.state.total + parseFloat(selected["price"].replace(",", "")),
+            benchOne: null,
+            benchTwo: null
         })
+    }
+
+    getBenchOne(event, val) {
+        this.setState({
+            benchOne: val.score
+        })
+    }
+
+    getBenchTwo(event, val) {
+        this.setState({
+            benchTwo: val.score
+        })
+    }
+
+    compare() {
+        console.log(this.state.gpuOptions)
+        return [
+            <div style={{display: "flex", justifyContent: "right", height: 75}}>
+                <p style={{alignSelf: "center", margin: 0}}>{this.state.benchOne}</p>
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={this.state.currentPage === "cpu" ? this.state.cpuOptions : this.state.gpuOptions}
+                    getOptionLabel={option => option.item}
+                    onChange={this.getBenchOne}
+                    style={{width: 300, alignSelf: "center", marginLeft: 30}}
+                    renderInput={(params) => <TextField {...params} label="Compare Product 1 Benchmark" variant="outlined" />}
+                />
+            </div>
+            ,
+            <div style={{display: "flex", justifyContent: "right", height: 75}}>
+                <p style={{alignSelf: "center", margin: 0}}>{this.state.benchTwo}</p>
+                <Autocomplete
+                    id="combo-box-demo"
+                    options={this.state.currentPage === "cpu" ? this.state.cpuOptions : this.state.gpuOptions}
+                    getOptionLabel={option => option.item}
+                    onChange={this.getBenchTwo}
+                    style={{width: 300, alignSelf: "center", marginLeft: 30}}
+                    renderInput={(params) => <TextField {...params} label="Compare Product 2 Benchmark" variant="outlined" />}
+                />
+            </div>
+        ]
     }
 
     buildHome() {
@@ -178,8 +255,8 @@ export default class BuildAPC extends Component {
                                             style={{margin: "auto", width: "70%", textAlign: "center", padding: 30}}>
                                             <span style={{display: "flex"}}>
                                                 <a key={spec["item_name"].uniqueID} href={spec["link"]} className="selected-a">{spec["item_name"]}</a>
-                                                <h2 key={spec["price"].uniqueID} style={{width: "25%", margin: 0, alignSelf: "center"}}>{spec["price"]}</h2>
-                                                <Button><DeleteIcon /></Button>
+                                                <h2 key={spec["price"].uniqueID} style={{width: "45%", margin: 0, alignSelf: "center"}}>{spec["price"]}</h2>
+                                                <Button onClick={this.delete} value={JSON.stringify(spec)}><DeleteIcon /></Button>
                                             </span>
                                         </div>
                                     )
@@ -196,14 +273,14 @@ export default class BuildAPC extends Component {
         return (
             // Topbar
             <div>
-                <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <form className="navbar-search d-none d-sm-inline-block form-inline ml-md-3 my-2 my-md-0 mw-100" style={{width: "100%"}}>
-                        <div className="input-group">
-                            <input className="form-control bg-light border-0 small" type="text" style={{maxWidth: "20%"}}
+                <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style={{height: "20%"}}>
+                    <form className="navbar-search d-none d-sm-inline-block form-inline ml-md-3 my-2 my-md-0 mw-100"
+                          style={{width: "100%", height: "100%"}}>
+                        <div className="input-group" style={{height: "100%"}}>
+                            <input className="form-control bg-light border-0 small" type="text" style={{maxWidth: "20%", height: 70, alignSelf: "center"}}
                                    placeholder="Enter Keyword" onChange={this.rename}/>
-
-                           <div className="input-group-append" style={{width: "20%"}}>
-                                <input />
+                            <div className="input-group-append" style={{width: "80%", display: "block"}}>
+                                {this.state.currentPage === "cpu" || this.state.currentPage === "gpu" ? this.compare() : null}
                             </div>
                         </div>
                     </form>
@@ -223,7 +300,7 @@ export default class BuildAPC extends Component {
                         <div className="card shadow mb-4" style={{margin: "auto", width: "90%", padding: 30}}>
                             <span style={{height: "min-content", display: "flex", alignItems: "center"}}>
                                 <a className="prod-a" target="_blank" href={val[1]["link"]} rel="noreferrer">{val[1]["item_name"]}</a>
-                                <span style={{width: "20%"}} />
+                                <span style={{width: "20%", textAlign: "right"}}>{val[1]["price"]}</span>
                                 <Button value={JSON.stringify(val[1])} onClick={this.changeToHome} style={{float: "right", width: 10}}><AddShoppingCartIcon /></Button>
                             </span>
                         </div>

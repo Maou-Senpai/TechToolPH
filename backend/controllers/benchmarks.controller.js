@@ -43,8 +43,14 @@ const scrape = async (req, res) => {
             });
 
             newBenchmark.save()
-                .then(() => rtn[n++] = "Added: " + item)
-                .catch((e) => rtn[n++] = e);
+                .then(() => {
+                    rtn[n++] = "Added: " + item
+                    console.log(item);
+                })
+                .catch((e) => {
+                    rtn[n++] = e;
+                    console.log(e);
+                });
         });
     }
 
