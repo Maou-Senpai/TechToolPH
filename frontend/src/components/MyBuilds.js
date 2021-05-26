@@ -17,8 +17,8 @@ const Build = props => {
             <td>{props.build.build_name}</td>
             <td>{props.build.updatedAt}</td>
             <td className="text-center">
-                <Link to={'/build-pc/'+props.build._id} className="btn btn-sm btn-primary">Edit</Link>
-                <a href="#" onClick={()=>{props.deletebuild(props.build._id)}} className="btn btn-sm btn-danger">Delete</a>
+                <Link to={'/build-pc/'+props.build._id} className="btn btn-sm btn-info">Edit</Link>
+                <a href="#" onClick={()=>{props.deletebuild(props.build._id)}} className="btn btn-sm btn-primary">Delete</a>
             </td>
         </tr>
     )
@@ -74,9 +74,9 @@ export default class MyBuild extends Component {
             data = false;
         }
         return (
-            <div className='MyBuilds text-center' style={{marginLeft: "14rem"}}>
+            <div className='MyBuilds text-center' style={{marginLeft: "20rem", marginTop: "5rem"}}>
                 {data?(<div>
-                <h1>My Builds</h1>
+                <h1>MY BUILDS</h1>
                 <table className="table table-bordered table-hover">
                     <thead className="thead-dark">
                         <tr>
@@ -90,7 +90,7 @@ export default class MyBuild extends Component {
                     </tbody>
                 </table> </div>):(
                     <>
-                    <h2>Log in first</h2>
+                    <h2>Log in to access saved builds!</h2>
                     </>)}
             </div>
 

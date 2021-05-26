@@ -31,9 +31,10 @@ export default class BuildAPC extends Component {
         cpu: "CPU",
         gpu: "Graphics Card",
         motherboard: "Motherboard",
-        ram: "Storage",
+        ram: "RAM",
+        storage: "Storage",
         psu: "PSU",
-        case: "Case",
+        case: "Case"
     }
 
     constructor(p) {
@@ -62,6 +63,16 @@ export default class BuildAPC extends Component {
                         userId: res.data.userId,
                         buildId: res.data._id
                     })
+                    const sum = this.state.catalog.cpu.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
+                        +this.state.catalog.gpu.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
+                        +this.state.catalog.motherboard.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
+                        +this.state.catalog.ram.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
+                        +this.state.catalog.storage.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
+                        +this.state.catalog.psu.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
+                        +this.state.catalog.case.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0);
+                    this.setState({
+                        total: sum
+                    })
                 })
                 .catch(err=>console.log(err));
         }
@@ -72,6 +83,10 @@ export default class BuildAPC extends Component {
         this.setState(initialState);
     }
 
+    createTwoButtonAlert() {
+
+    }
+
     rename(event) {
         this.setState({
             build: event.target.value
@@ -80,6 +95,7 @@ export default class BuildAPC extends Component {
 
     save() {
         console.log(localStorage.user);
+
         let baseUrl = process.env.baseURL || "http://localhost:5000";
         if(this.props.match.params.id){
             axios.post(baseUrl+"/build/update/"+this.props.match.params.id,[this.state.build,this.state.catalog,this.state.userId])

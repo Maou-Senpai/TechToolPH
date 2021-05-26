@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import Axios from "axios";
 import ErrorNotice from "../misc/ErrorNotice";
+import './form.css';
 
 export default function Login() {
     const [username, setUsername] = useState();
@@ -33,28 +34,35 @@ export default function Login() {
         }
     };
     return (
-        <div className="page">
+        <div className="page" style={{marginLeft: "20rem",marginTop:"5rem"}}>
             <h2>Log in</h2>
             {error && (
                 <ErrorNotice message={error} clearError={() => setError(undefined)} />
             )}
             <form className="form" onSubmit={submit}>
-                <label htmlFor="login-username">Username</label>
-                <input
-                    id="login-username"
-                    type="username"
-                    onChange={(e) => setUsername(e.target.value)}
-                />
+                <div className="form-group">
+                    <label htmlFor="login-username">Username</label>
+                    <input id="login-username"
+                           type="username"
+                           className="form-control"
+                           placeholder="Enter username"
+                           onChange={(e) => setUsername(e.target.value)}
+                    />
+                </div>
 
-                <label htmlFor="login-password">Password</label>
-                <input
-                    id="login-password"
-                    type="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-
-                <input type="submit" value="Log in" />
+                <div className="form-group">
+                    <label htmlFor="login-password">Password</label>
+                    <input id="login-password"
+                           type="password"
+                           className="form-control"
+                           placeholder="Enter password"
+                           onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
+                <input type="submit" className="btn btn-dark btn-lg btn-block" value="Log in" />
             </form>
+
         </div>
+
     );
 }

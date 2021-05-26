@@ -35,32 +35,31 @@ export default function Register() {
     };
 
     return (
-        <div className="page">
-            <h2>Register</h2>
-            {error && (
-                <ErrorNotice message={error} clearError={() => setError(undefined)} />
-            )}
+        <div className="page" style={{marginLeft: "20rem",marginTop:"5rem"}}>
             <form className="form" onSubmit={submit}>
-                <label htmlFor="register-username">Username</label>
-                <input
-                    id="register-username"
-                    type="username"
-                    onChange={(e) => setUsername(e.target.value)}
-                />
+                <h3>Register</h3>
+                {error && (
+                    <ErrorNotice message={error} clearError={() => setError(undefined)} />
+                )}
+                <div className="form-group">
+                    <label htmlFor="register-username">Username</label>
+                    <input id="register-username" type="usename" className="form-control" placeholder="Enter username"
+                           onChange={(e) => setUsername(e.target.value)}/>
+                </div>
 
-                <label htmlFor="register-password">Password</label>
-                <input
-                    id="register-password"
-                    type="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Verify password"
-                    onChange={(e) => setPasswordCheck(e.target.value)}
-                />
+                <div className="form-group">
+                    <label htmlFor="register-password">Password</label>
+                    <input type="password" className="form-control" placeholder="Enter password"
+                           onChange={(e) => setPassword(e.target.value)}/>
+                </div>
 
-                <input type="submit" value="Register" />
+                <div className="form-group">
+                    <input htmlFor="register-password"  id="register-password" type="password" className="form-control" placeholder="Verify password"
+                           onChange={(e) => setPasswordCheck(e.target.value)}/>
+                </div>
+
+
+                <button type="submit" className="btn btn-dark btn-lg btn-block">Register</button>
             </form>
         </div>
     );

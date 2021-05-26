@@ -41,7 +41,6 @@ function App() {
                     token,
                     user: userRes.data,
                 });
-                console.log(userRes.data.name)
             }
         };
 
@@ -55,8 +54,8 @@ function App() {
                 <Navbar />
                 <Route path="/login" component={Login} />
                 <Route path="/register" component={Register} />
-                <Route path='/news' component={News} />
-                <Route path={['/build-pc/:id','/build-pc/']} component={BuildAPC} />
+                <Route path="/news" component={News} />
+                <Route path={['/build-pc/:id','/build-pc']} component={BuildAPC} />
                 <Route path='/my-builds' component={MyBuilds} />
                 <Route path='/admin-settings' component={Admin} />
             </div>
