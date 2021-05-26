@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import {Button} from "@material-ui/core";
 import axios from "axios";
 import checkLoggedIn from "./Auth/UserAuth";
-import { Redirect } from 'react-router-dom';
+import '../resources/BuildAPC.css';
 
 const initialState = {
     build: "",
@@ -49,13 +49,10 @@ export default class BuildAPC extends Component {
     componentDidMount() {
         (async()=>{
             const data = await checkLoggedIn();
-            console.log(data);
 
             this.state.userId = data.user.id;
         })();
 
-        console.log("did");
-        console.log(this.props.match.params);
         if(this.props.match.params){
             axios.get('http://localhost:5000/build/'+this.props.match.params.id)
                 .then(res=>{
@@ -72,10 +69,8 @@ export default class BuildAPC extends Component {
 
 
     componentWillUnmount() {
-        console.log("hello");
         this.setState(initialState);
     }
-
 
     rename(event) {
         this.setState({
@@ -84,7 +79,7 @@ export default class BuildAPC extends Component {
     }
 
     save() {
-        console.log("hello");
+        console.log(localStorage.user);
         let baseUrl = process.env.baseURL || "http://localhost:5000";
         if(this.props.match.params.id){
             axios.post(baseUrl+"/build/update/"+this.props.match.params.id,[this.state.build,this.state.catalog,this.state.userId])
@@ -136,17 +131,15 @@ export default class BuildAPC extends Component {
                 <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div className="input-group">
-                            <input className="form-control bg-light border-0 small" type="text"
-                                   placeholder="Untitled Build" onChange={this.rename}/>
+                            <input className="form-control bg-light border-0 small" type="text" placeholder="Untitled Build" onChange={this.rename}/>
                             <div className="input-group-append">
-                                <button type="button" onClick={this.save} style={{border: "none",
-                                    backgroundColor: "transparent", marginLeft: 15}}>
+                                <button type="button" onClick={this.save} className="save-button">
                                     <SaveIcon />
                                 </button>
                             </div>
                         </div>
                     </form>
-                    <h3 style={{margin: 0}}>{this.state.total}</h3>
+                    <h3>{this.state.total}</h3>
                 </nav>
 
                 {/*Content*/}
@@ -155,12 +148,10 @@ export default class BuildAPC extends Component {
                         return (
                             <div>
                                 {/*Product Type*/}
-                                <div className="card shadow mb-4" style={{margin: "auto", width: "90%", padding: 30}}>
+                                <div className="card shadow mb-4 prod-type-div">
                                     <span style={{fontSize: 20, fontWeight: "bold", width: "100%", display: "flex"}}>
-                                        <p style={{margin: 0, float: "left", alignSelf: "center", width: "100%"}}>{val[1]}</p>
-                                        <Button value={val[0]} onClick={this.changeToProducts} style={{float: "right"}}>
-                                            <AddIcon />
-                                        </Button>
+                                        <p key={val[1].uniqueID} className="prod-type-p">{val[1]}</p>
+                                        <Button value={val[0]} onClick={this.changeToProducts}><AddIcon /></Button>
                                     </span>
                                 </div>
 
@@ -170,13 +161,9 @@ export default class BuildAPC extends Component {
                                         <div className="card shadow mb-4"
                                             style={{margin: "auto", width: "70%", textAlign: "center", padding: 30}}>
                                             <span style={{display: "flex"}}>
-                                                <a style={{fontSize: 20, width: "70%", alignSelf: "center",
-                                                    textAlign: "left", display: "flex", float: "left"}}
-                                                   href={spec["link"]}>{spec["item_name"]}</a>
-                                                <h2 style={{width: "25%", margin: 0, alignSelf: "center"}}>{spec["price"]}</h2>
-                                                <Button>
-                                                    <DeleteIcon />
-                                                </Button>
+                                                <a key={spec["item_name"].uniqueID} href={spec["link"]} className="selected-a">{spec["item_name"]}</a>
+                                                <h2 key={spec["price"].uniqueID} style={{width: "25%", margin: 0, alignSelf: "center"}}>{spec["price"]}</h2>
+                                                <Button><DeleteIcon /></Button>
                                             </span>
                                         </div>
                                     )
@@ -194,14 +181,12 @@ export default class BuildAPC extends Component {
             // Topbar
             <div>
                 <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <form className="navbar-search d-none d-sm-inline-block form-inline ml-md-3 my-2 my-md-0 mw-100" style={{width: "100%"}}>
                         <div className="input-group">
-                            <input className="form-control bg-light border-0 small" type="text"
+                            <input className="form-control bg-light border-0 small" type="text" style={{maxWidth: "20%"}}
                                    placeholder="Enter Keyword" onChange={this.rename}/>
-                            <div className="input-group-append">
-                                <button type="button" style={{border: "none", backgroundColor: "transparent", marginLeft: 15}}>
-                                    {/*<SaveIcon />*/}
-                                </button>
+                            <div className="input-group-append" style={{width: "80%"}}>
+                                <input />
                             </div>
                         </div>
                     </form>
@@ -220,14 +205,9 @@ export default class BuildAPC extends Component {
                     return (
                         <div className="card shadow mb-4" style={{margin: "auto", width: "90%", padding: 30}}>
                             <span style={{height: "min-content", display: "flex", alignItems: "center"}}>
-                                <a style={{width: "80%", float: "left", marginBottom: 0}} target="_blank"
-                                   href={val[1]["link"]} rel="noreferrer">
-                                    {val[1]["item_name"]}
-                                </a>
+                                <a className="prod-a" target="_blank" href={val[1]["link"]} rel="noreferrer">{val[1]["item_name"]}</a>
                                 <span style={{width: "20%"}} />
-                                <Button value={JSON.stringify(val[1])} onClick={this.changeToHome} style={{float: "right", width: 10}}>
-                                    <AddShoppingCartIcon />
-                                </Button>
+                                <Button value={JSON.stringify(val[1])} onClick={this.changeToHome} style={{float: "right", width: 10}}><AddShoppingCartIcon /></Button>
                             </span>
                         </div>
                     )

@@ -3,11 +3,9 @@ import { Link } from 'react-router-dom';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import GavelIcon from '@material-ui/icons/Gavel';
 import InboxIcon from '@material-ui/icons/Inbox';
-// import SettingsIcon from '@material-ui/icons/Settings';
 import AuthOptions from "../components/Auth/Auth";
 
 export default class Navbar extends Component {
-
     render() {
         return(
             <ul id="sidebar" className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion">
@@ -16,7 +14,7 @@ export default class Navbar extends Component {
                     <div className="sidebar-brand-text mx-3">TechToolPH</div>
                 </Link>
 
-                <hr className="sidebar-divider my-0" />
+                <hr className="sidebar-divider my-2" style={{color: "white", height: 3}}/>
 
                 <li className="nav-item" style={{marginLeft: 10}}>
                     <Link to="/news" className="nav-link">
@@ -36,12 +34,7 @@ export default class Navbar extends Component {
                         <span style={{margin: 30}}>My Builds</span>
                     </Link>
                 </li>
-                {/*<li className="nav-item" style={{marginLeft: 10}}>*/}
-                {/*    <Link to="/admin-settings" className="nav-link">*/}
-                {/*        <SettingsIcon />*/}
-                {/*        <span style={{margin: 30}}>Admin Settings</span>*/}
-                {/*    </Link>*/}
-                {/*</li>*/}
+
                 <AuthOptions/>
             </ul>
         )

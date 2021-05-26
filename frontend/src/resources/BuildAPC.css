@@ -1,0 +1,45 @@
+.save-button {
+    border: none;
+    background-color: transparent;
+    margin-left: 15px;
+}
+
+h3 {
+    margin: 0;
+}
+
+.prod-type-div {
+    margin: auto;
+    width: 90%;
+    padding: 30px;
+}
+
+.prod-type-p {
+    margin: 0;
+    float: left;
+    align-self: center;
+    width: 100%;
+}
+
+.selected-a {
+    font-size: 20px;
+    width: 100%;
+    align-self: center;
+    text-align: left;
+    display: flex;
+    float: left;
+}
+
+.prod-a {
+    width: 80%;
+    float: left;
+    margin-bottom: 0;
+}
+
+.content {
+    margin-left: 14rem;
+}
+
+.compare {
+    float: right;
+}

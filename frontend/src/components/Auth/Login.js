@@ -25,7 +25,9 @@ export default function Login() {
                 user: loginRes.data.user,
             });
             localStorage.setItem("auth-token", loginRes.data.token);
-            history.push("/");
+            localStorage.setItem("user", loginRes.data.user);
+            console.log("hello")
+            history.push("/news");
         } catch (err) {
             err.response.data.msg && setError(err.response.data.msg);
         }

@@ -52,6 +52,7 @@ export default class News extends Component {
                         </div>
                     </form>
                 </nav>
+
                 {/*Content*/}
                 <div className="container-fluid">
                     {/*Left*/}
@@ -62,13 +63,15 @@ export default class News extends Component {
                         }).map((val, idx) => {
                             if (idx % 2 === 0) return <a target="_blank" href={val.link} rel="noreferrer">
                                 <div className="card shadow mb-4" style={{alignItems: "center", textAlign: "center", padding: 30}}>
-                                    <img src={val.thumbnail} style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
-                                    <span style={{fontSize: 20, fontWeight: "bold"}}>{val.title}</span>
+                                    <img key={val.thumbnail.uniqueID} src={val.thumbnail}
+                                         style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
+                                    <span key={val.title.uniqueID} style={{fontSize: 20, fontWeight: "bold"}}>{val.title}</span>
                                 </div>
                             </a>
                             else return null;
                         }) : null}
                     </div>
+
                     {/*Right*/}
                     <div style={{width: "49%", float: "right"}}>
                         {this.state.loaded ? this.state.news.filter((val) =>{
@@ -77,8 +80,9 @@ export default class News extends Component {
                         }).map((val, idx) => {
                             if (idx % 2 !== 0) return <a target="_blank" href={val.link} rel="noreferrer">
                                 <div className="card shadow mb-4" style={{alignItems: "center", textAlign: "center", padding: 30}}>
-                                    <img src={val.thumbnail} style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
-                                    <span style={{fontSize: 20, fontWeight: "bold"}}>{val.title}</span>
+                                    <img key={val.thumbnail.uniqueID} src={val.thumbnail}
+                                         style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
+                                    <span key={val.title.uniqueID} style={{fontSize: 20, fontWeight: "bold"}}>{val.title}</span>
                                 </div>
                             </a>
                             else return null;

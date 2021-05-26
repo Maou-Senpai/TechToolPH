@@ -4102,7 +4102,9 @@ input[type="button"].btn-block {
 }
 
 .navbar {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -10320,6 +10322,7 @@ a:focus {
 }
 
 .sidebar {
+  position: fixed;
   width: 6.5rem;
   min-height: 100vh;
 }
