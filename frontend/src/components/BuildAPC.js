@@ -131,13 +131,18 @@ export default class BuildAPC extends Component {
 
     save() {
         let baseUrl = process.env.baseURL || "http://localhost:5000";
-        if(this.props.match.params.id){
+        if(this.state==initialState){
+
+        }
+        if(this.props.match.params.id ){
+            alert("Build updated!");
             axios.post(baseUrl+"/build/update/"+this.props.match.params.id,[this.state.build,this.state.catalog,this.state.userId])
                 .then((res)=>console.log(res));
 
         }
         else {
             if(localStorage.getItem('auth-token')!=="") {
+                alert("Build saved!");
                 axios.post(baseUrl + "/build/add", [this.state.build, this.state.catalog, this.state.userId])
                     .then((res) => {
                         console.log(res);
@@ -147,6 +152,7 @@ export default class BuildAPC extends Component {
                     });
             }
             else{
+                alert("Save feature is only available if you have an account");
                 console.log("Login first")
             }
         }
@@ -176,41 +182,58 @@ export default class BuildAPC extends Component {
         })
     }
 
+
+
     getBenchOne(event, val) {
-        this.setState({
-            benchOne: val.score
-        })
+        if(val) {
+            this.setState({
+                benchOne: val.score
+            })
+        }
+        else{
+            this.setState({
+                benchOne: null
+            })
+        }
+
     }
 
     getBenchTwo(event, val) {
-        this.setState({
-            benchTwo: val.score
-        })
+        if(val) {
+            this.setState({
+                benchTwo: val.score
+            })
+        }
+        else{
+            this.setState({
+                benchTwo: null
+            })
+        }
     }
 
     compare() {
         console.log(this.state.gpuOptions)
         return [
             <div style={{display: "flex", justifyContent: "right", height: 75}}>
-                <p style={{alignSelf: "center", margin: 0}}>{this.state.benchOne}</p>
+                <p style={{alignSelf: "center", margin: 50}}>{this.state.benchOne}</p>
                 <Autocomplete
                     id="combo-box-demo"
                     options={this.state.currentPage === "cpu" ? this.state.cpuOptions : this.state.gpuOptions}
                     getOptionLabel={option => option.item}
                     onChange={this.getBenchOne}
-                    style={{width: 300, alignSelf: "center", marginLeft: 30}}
+                    style={{width: 300, alignSelf: "center", marginLeft: 10}}
                     renderInput={(params) => <TextField {...params} label="Compare Product 1 Benchmark" variant="outlined" />}
                 />
             </div>
             ,
             <div style={{display: "flex", justifyContent: "right", height: 75}}>
-                <p style={{alignSelf: "center", margin: 0}}>{this.state.benchTwo}</p>
+                <p style={{alignSelf: "center", margin: 50}}>{this.state.benchTwo}</p>
                 <Autocomplete
                     id="combo-box-demo"
                     options={this.state.currentPage === "cpu" ? this.state.cpuOptions : this.state.gpuOptions}
                     getOptionLabel={option => option.item}
                     onChange={this.getBenchTwo}
-                    style={{width: 300, alignSelf: "center", marginLeft: 30}}
+                    style={{width: 300, alignSelf: "center", marginLeft: 10}}
                     renderInput={(params) => <TextField {...params} label="Compare Product 2 Benchmark" variant="outlined" />}
                 />
             </div>
