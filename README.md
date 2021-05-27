@@ -40,3 +40,5 @@ Version | Primary Author(s) | Description of Version | Date Completed
 
 ## Dave Galamgam
 * Likes 
+
+## Edric Hao
