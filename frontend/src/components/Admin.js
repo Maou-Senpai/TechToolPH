@@ -53,16 +53,15 @@ export default class Admin extends Component {
 
     render(){
         return (
-            <div className='Admin' style={{marginLeft: "16rem",marginTop: "5rem"}}>
-                <h1>ADMIN SETTINGS</h1>
-                <h3 style={{marginTop: "3rem"}}>update contents:</h3>
-                <button className="News" type="button" onclick={this.scrapeNews()}>
+            <div className='Admin' style={{marginLeft: "14rem"}}>
+                <h1>Admin Settings</h1>
+                <button className="News" type="button" onClick={this.scrapeNews}>
                     News
                 </button>
-                <button className="Product" type="button" onclick={this.scrapeProduct()}>
+                <button className="Product" type="button" onClick={this.scrapeProduct}>
                     Product
                 </button>
-                <button className="Benchmarks" type="button" onclick={this.scrapeBenchmark()}>
+                <button className="Benchmarks" type="button" onClick={this.scrapeBenchmark}>
                     Benchmarks
                 </button>
                 <h1>{this.state.response}</h1>

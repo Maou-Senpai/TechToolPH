@@ -31,7 +31,8 @@ const initialState = {
     gpuOptions: [],
     cpuOptions: [],
     benchOne: null,
-    benchTwo: null
+    benchTwo: null,
+    searchTerm: "",
 }
 
 export default class BuildAPC extends Component {
@@ -51,6 +52,10 @@ export default class BuildAPC extends Component {
         for (let part of Object.entries(this.state.catalog)) {
             this.state.catalog[part[0]] = [];
         }
+        this.setState({
+            cpuOptions: [],
+            gpuOptions: []
+        })
 
         this.rename = this.rename.bind(this);
         this.save = this.save.bind(this);
@@ -59,6 +64,7 @@ export default class BuildAPC extends Component {
         this.delete = this.delete.bind(this);
         this.getBenchOne = this.getBenchOne.bind(this);
         this.getBenchTwo = this.getBenchTwo.bind(this);
+        this.filter = this.filter.bind(this);
 
         axios.get("http://localhost:5000/benchmarks/gpu").then(res => {
             for (let bench of res.data) {
@@ -72,6 +78,12 @@ export default class BuildAPC extends Component {
                 this.state.cpuBench[bench.item] = bench.score;
                 this.state.cpuOptions.push(bench);
             }
+        })
+    }
+
+    filter(event) {
+        this.setState({
+            searchTerm: event.target.value
         })
     }
 
@@ -131,10 +143,10 @@ export default class BuildAPC extends Component {
 
     save() {
         let baseUrl = process.env.baseURL || "http://localhost:5000";
-        if(this.state==initialState){
+        if (this.state===initialState) {
 
         }
-        if(this.props.match.params.id ){
+        if (this.props.match.params.id ) {
             alert("Build updated!");
             axios.post(baseUrl+"/build/update/"+this.props.match.params.id,[this.state.build,this.state.catalog,this.state.userId])
                 .then((res)=>console.log(res));
@@ -301,7 +313,7 @@ export default class BuildAPC extends Component {
                           style={{width: "100%", height: "100%"}}>
                         <div className="input-group" style={{height: "100%"}}>
                             <input className="form-control bg-light border-0 small" type="text" style={{maxWidth: "20%", height: 70, alignSelf: "center"}}
-                                   placeholder="Enter Keyword" onChange={this.rename}/>
+                                   placeholder="Enter Keyword" onChange={this.filter}/>
                             <div className="input-group-append" style={{width: "80%", display: "block"}}>
                                 {this.state.currentPage === "cpu" || this.state.currentPage === "gpu" ? this.compare() : null}
                             </div>
@@ -318,7 +330,10 @@ export default class BuildAPC extends Component {
         return (
             // Content
             <div className="container-fluid" style={{width: "100%"}}>
-                {Object.entries(this.state.loadedProducts).map((val) => {
+                {Object.entries(this.state.loadedProducts).filter((val) =>{
+                    return ((this.state.searchTerm === "") ||
+                        (val[1]["item_name"].toLowerCase().includes(this.state.searchTerm.toLowerCase())))
+                }).map((val) => {
                     return (
                         <div className="card shadow mb-4" style={{margin: "auto", width: "90%", padding: 30}}>
                             <span style={{height: "min-content", display: "flex", alignItems: "center"}}>
