@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
+import Users from '../components/admin/Users';
 
 export default class Admin extends Component {
     constructor(p){
@@ -65,6 +66,7 @@ export default class Admin extends Component {
                     Benchmarks
                 </button>
                 <h1>{this.state.response}</h1>
+                <Users style={{marginTop: "5rem"}}/>
             </div>
         )
     }

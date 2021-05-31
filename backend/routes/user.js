@@ -21,7 +21,7 @@ router.get("/", auth, async (req, res) => {
     });
 });
 
-//router.get('/', user.getUsers);
+router.get('/users', user.getUsers);
 router.get('/:id',user.getUser);
 router.get('/builds/:id',user.getUserBuilds);
 router.delete('/delete/:id',user.deleteUser);
