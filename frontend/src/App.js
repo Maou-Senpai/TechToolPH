@@ -1,16 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Axios from "axios";
 import UserContext from "../src/components/context/UserContext";
+import 'semantic-ui-css/semantic.min.css';
 
 import Navbar from './components/Navbar';
 import News from './components/News';
-import BuildAPC from './components/BuildAPC';
+import BuildAPC from "./components/BuildAPC";
 import MyBuilds from './components/MyBuilds';
+import ViewMyBuild from './components/ViewMyBuild';
 import Admin from './components/Admin';
-import Login from './components/Auth/Login';
-import Register from './components/Auth/Register';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+
+import UserBuilds from './components/admin/UserBuilds';
+
 
 import './resources/sb-admin-2.css';
 
@@ -57,7 +62,12 @@ function App() {
                 <Route path="/news" component={News} />
                 <Route path={['/build-pc/:id','/build-pc']} component={BuildAPC} />
                 <Route path='/my-builds' component={MyBuilds} />
+                <Route path='/my-builds/:id' component={ViewMyBuild} />
+
                 <Route path='/admin-settings' component={Admin} />
+                <Route path='/view/:id' component={UserBuilds} />
+
+
             </div>
             </UserContext.Provider>
         </Router>

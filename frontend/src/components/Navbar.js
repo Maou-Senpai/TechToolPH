@@ -1,10 +1,10 @@
-import React, { Component, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import GavelIcon from '@material-ui/icons/Gavel';
 import InboxIcon from '@material-ui/icons/Inbox';
 import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
-import AuthOptions from "../components/Auth/Auth";
+import AuthOptions from "./auth/Auth";
 import UserContext from "../components/context/UserContext";
 
 export default function Navbar(){

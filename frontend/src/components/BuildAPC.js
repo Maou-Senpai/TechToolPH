@@ -5,7 +5,7 @@ import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {Button, TextField} from "@material-ui/core";
 import axios from "axios";
-import checkLoggedIn from "./Auth/UserAuth";
+import checkLoggedIn from "./auth/UserAuth";
 import '../resources/BuildAPC.css';
 
 import {Autocomplete} from "@material-ui/lab";
@@ -224,7 +224,6 @@ export default class BuildAPC extends Component {
     }
 
     compare() {
-        console.log(this.state.gpuOptions)
         return [
             <div style={{display: "flex", justifyContent: "right", height: 75}}>
                 <p style={{alignSelf: "center", margin: 50}}>{this.state.benchOne}</p>

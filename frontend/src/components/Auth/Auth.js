@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import {Link, useHistory} from "react-router-dom";
 import UserContext from "../context/UserContext";
 import SettingsIcon from '@material-ui/icons/Settings';
-import InboxIcon from "@material-ui/icons/Inbox";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 export default function AuthOptions() {

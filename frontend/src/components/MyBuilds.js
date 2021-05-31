@@ -5,11 +5,7 @@ import axios from 'axios';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
-
-//import UserContext from "../components/context/UserContext";
-//import jwtdecode from 'jwt-decode';
-
-import checkLoggedIn from "./Auth/UserAuth";
+import checkLoggedIn from "./auth/UserAuth";
 
 const Build = props => {
     return(
@@ -17,6 +13,7 @@ const Build = props => {
             <td>{props.build.build_name}</td>
             <td>{props.build.updatedAt}</td>
             <td className="text-center">
+                <Link to={'/my-builds/'+props.build._id} className="btn btn-sm btn-danger">View</Link>
                 <Link to={'/build-pc/'+props.build._id} className="btn btn-sm btn-info">Edit</Link>
                 <a href="#" onClick={()=>{props.deletebuild(props.build._id)}} className="btn btn-sm btn-primary">Delete</a>
             </td>
@@ -37,7 +34,7 @@ export default class MyBuild extends Component {
             const data = await checkLoggedIn();
             console.log(data);
 
-            if(data.token != "") {
+            if(data.token !== "") {
                 axios.get('http://localhost:5000/user/builds/' + data.user.id)
                     .then(res => {
                         this.setState({build: res.data})
@@ -70,7 +67,7 @@ export default class MyBuild extends Component {
     render(){
         const token = localStorage.getItem("auth-token");
         let data = true;
-        if(token=="" || token==null){
+        if(token==="" || token===null){
             data = false;
         }
         return (
