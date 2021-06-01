@@ -39,8 +39,10 @@ export default class MyBuild extends Component {
         this.state = {users:[]};
     }
 
+    baseURL = process.env.REACT_APP_API || "http://localhost:5000";
+
     componentDidMount() {
-        axios.get("http://localhost:5000/user/users")
+        axios.get(this.baseURL + "/user/users")
             .then(res=>{
                 this.setState({
                     users: res.data

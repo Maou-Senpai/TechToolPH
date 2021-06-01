@@ -13,13 +13,15 @@ export default function Register() {
     const { setUserData } = useContext(UserContext);
     const history = useHistory();
 
+    const baseURL = process.env.REACT_APP_API || "http://localhost:5000";
+
     const submit = async (e) => {
         e.preventDefault();
 
         try {
             const newUser = { username, password, passwordCheck };
-            await Axios.post("http://localhost:5000/user/signup", newUser);
-            const loginRes = await Axios.post("http://localhost:5000/user/login", {
+            await Axios.post(baseURL + "/user/signup", newUser);
+            const loginRes = await Axios.post(baseURL + "/user/login", {
                 username,
                 password,
             });

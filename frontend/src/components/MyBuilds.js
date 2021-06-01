@@ -29,13 +29,15 @@ export default class MyBuild extends Component {
         this.deletebuild = this.deletebuild.bind(this);
     }
 
+    baseURL = process.env.REACT_APP_API || "http://localhost:5000";
+
     componentDidMount() {
         (async()=>{
             const data = await checkLoggedIn();
             console.log(data);
 
             if(data.token !== "") {
-                axios.get('http://localhost:5000/user/builds/' + data.user.id)
+                axios.get(this.baseURL + '/user/builds/' + data.user.id)
                     .then(res => {
                         this.setState({build: res.data})
                         console.log(res.data);
@@ -49,7 +51,7 @@ export default class MyBuild extends Component {
     }
 
     deletebuild(id){
-        axios.delete('http://localhost:5000/build/delete/'+id)
+        axios.delete(this.baseURL + '/build/delete/'+id)
             .then(res=>console.log(res.data))
             this.setState({
                 build: this.state.build.filter(el=>el._id !== id)

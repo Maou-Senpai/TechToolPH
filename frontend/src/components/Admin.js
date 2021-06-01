@@ -13,9 +13,11 @@ export default class Admin extends Component {
         }
     }
 
+    baseURL = process.env.REACT_APP_API || "http://localhost:5000";
+
     scrapeNews()
     {
-        axios.get('http://localhost:5000/news/scrape')
+        axios.get(this.baseURL + '/news/scrape')
             .then(res => {
                 console.log(res.data);
                 this.setState({response: "News Updated"})
@@ -28,7 +30,7 @@ export default class Admin extends Component {
 
     scrapeProduct()
     {
-        axios.get('http://localhost:5000/products/scrape')
+        axios.get(this.baseURL + '/products/scrape')
             .then(res => {
                 console.log(res.data);
                 this.setState({response: "Product Updated"})
@@ -41,7 +43,7 @@ export default class Admin extends Component {
 
     scrapeBenchmark()
     {
-        axios.get('http://localhost:5000/benchmarks/scrape')
+        axios.get(this.baseURL + '/benchmarks/scrape')
             .then(res => {
                 console.log(res.data);
                 this.setState({response: "Benchmark Updated"})

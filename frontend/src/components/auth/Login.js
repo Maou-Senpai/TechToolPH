@@ -12,13 +12,14 @@ export default function Login() {
 
     const { setUserData } = useContext(UserContext);
     const history = useHistory();
+    const baseURL = process.env.REACT_APP_API || "http://localhost:5000";
 
     const submit = async (e) => {
         e.preventDefault();
         try {
             const loginUser = { username, password };
             const loginRes = await Axios.post(
-                "http://localhost:5000/user/login",
+                baseURL + "/user/login",
                 loginUser
             );
             setUserData({

@@ -46,6 +46,8 @@ export default class BuildAPC extends Component {
         case: "Case",
     }
 
+    baseURL = process.env.REACT_APP_API || "http://localhost:5000";
+
     constructor(p) {
         super(p);
         this.state = initialState;
@@ -66,14 +68,14 @@ export default class BuildAPC extends Component {
         this.getBenchTwo = this.getBenchTwo.bind(this);
         this.filter = this.filter.bind(this);
 
-        axios.get("http://localhost:5000/benchmarks/gpu").then(res => {
+        axios.get(this.baseURL + "/benchmarks/gpu").then(res => {
             for (let bench of res.data) {
                 this.state.gpuBench[bench.item] = bench.score;
                 this.state.gpuOptions.push(bench);
             }
         })
 
-        axios.get("http://localhost:5000/benchmarks/cpu").then(res => {
+        axios.get(this.baseURL + "/benchmarks/cpu").then(res => {
             for (let bench of res.data) {
                 this.state.cpuBench[bench.item] = bench.score;
                 this.state.cpuOptions.push(bench);
@@ -95,7 +97,7 @@ export default class BuildAPC extends Component {
         })();
 
         if(this.props.match.params){
-            axios.get('http://localhost:5000/build/'+this.props.match.params.id)
+            axios.get(this.baseURL + '/build/' + this.props.match.params.id)
                 .then(res=>{
                     this.setState({
                         build: res.data.build_name,

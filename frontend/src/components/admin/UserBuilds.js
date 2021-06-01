@@ -59,8 +59,10 @@ export default class UserBuilds extends Component {
         })
     }
 
+    baseURL = process.env.REACT_APP_API || "http://localhost:5000";
+
     componentDidMount() {
-        axios.get('http://localhost:5000/user/builds/' + this.props.match.params.id)
+        axios.get(this.baseURL + '/user/builds/' + this.props.match.params.id)
             .then(res => {
                 this.setState({build: res.data})
                 console.log(res.data);
