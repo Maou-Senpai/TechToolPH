@@ -51,6 +51,7 @@ export default class ViewMyBuild extends Component {
                 </Modal.Content>
                 <Modal.Actions>
                     <Link to="/my-builds"><Button>Close</Button></Link>
+                    <Link to={'/build-pc/'+this.props.match.params.id}><Button>Edit</Button></Link>
 
                 </Modal.Actions>
             </Modal>
