@@ -44,8 +44,12 @@ export default function Navbar() {
             <li className="nav-item" style={{marginLeft: 10}}>
             {userData.user ? (
                 <div className="nav-link">
-                    <AccountCircleRoundedIcon />
-                    <span style={{margin: 20}}>{userData.user.username}</span>
+                    {userData.user.username!=="admin"?(
+                        <Link to={"/account/"+userData.user.id} className="nav-link">
+                        <AccountCircleRoundedIcon />
+                        <span style={{margin: 20}}>{userData.user.username}</span>
+                        </Link>):(<><AccountCircleRoundedIcon />
+                        <span style={{margin: 20}}>{userData.user.username}</span></>)}
                 </div>
             ) : (
                 <div className="nav-link">

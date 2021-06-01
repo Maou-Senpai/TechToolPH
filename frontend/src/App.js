@@ -16,6 +16,8 @@ import Register from './components/auth/Register';
 import './resources/sb-admin-2.css';
 import ViewMyBuild from "./components/ViewMyBuild";
 import UserBuilds from "./components/admin/UserBuilds";
+import Account from './components/auth/Account';
+import Delete from './components/auth/Delete';
 
 function App() {
     const [userData, setUserData] = useState({
@@ -66,6 +68,8 @@ function App() {
                 <Route path='/my-builds/:id' component={ViewMyBuild} />
                 <Route path='/admin-settings' component={Admin} />
                 <Route path='/view/:id' component={UserBuilds} />
+                <Route path='/account/:id' component={Account} />
+                <Route path='/account/delete/:id' component={Delete}/>
             </div>
             </UserContext.Provider>
         </Router>
