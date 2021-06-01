@@ -3,11 +3,6 @@ import bcrypt from 'bcryptjs';
 import User from '../models/user.model.js';
 import jwt from "jsonwebtoken";
 import Build from '../models/build.model.js';
-import auth from "../middleware/auth.js";
-
-
-
-
 
 const getUsers = (req,res)=>{
     User.find()
@@ -16,14 +11,18 @@ const getUsers = (req,res)=>{
 };
 
 const getUser =  (req,res)=>{
-    User.findById(req.user)
+    User.findById(req.params.id)
         .then(user => res.json(user))
         .catch(err => res.status(400).json('Error :' + err));
 };
 
 const deleteUser = (req,res)=>{
+    Build.deleteMany({userId: req.params.id})
+        .then(builds=>{res.json('User builds deleted'); console.log("nice")})
+        .catch(err=>res.status(400).json('Eroror :'+ err));
+
     User.findByIdAndDelete(req.params.id)
-        .then(user => res.json('User was deleted'))
+        .then(user => {res.json('User was deleted'); console.log("woop")})
         .catch(err => res.status(400).json('Error :'+ err));
 };
 
@@ -34,6 +33,57 @@ const getUserBuilds = (req,res)=>{
         .then(builds => res.json(builds))
         .catch(err => res.status(400).json('Error :'+ err));
 };
+
+
+const update = async(req,res)=>{
+    console.log("i went here")
+
+    let { username, password, passwordCheck } = req.body;
+
+    let pass = false;
+    if(!password && !passwordCheck){
+        pass = true;
+    }
+
+    console.log(!pass)
+
+    if (!pass) {
+        if(!password || !passwordCheck) {
+            console.log("fail3")
+            return res.status(400).json({msg: "Not all fields have been entered."});
+        }
+    }
+
+    if(password && passwordCheck) {
+        if (password.length < 5) {
+            console.log("fail")
+            return res
+                .status(400)
+                .json({msg: "The password needs to be at least 5 characters long."});
+        }
+        if (password !== passwordCheck) {
+            console.log("fail1")
+            return res
+                .status(400)
+                .json({msg: "Enter the same password twice for verification."});
+        }
+    }
+
+
+    User.findById((req.params.id))
+        .then(user => {
+
+            user.username = username
+            if(pass !== true){
+                user.password = user.generateHash(password)
+            }
+
+            user.save()
+                .then(() => res.json('Record was updated!'))
+                .catch(err => res.status(400).json('Error :' + err));
+        })
+        .catch(err => res.status(400).json('Error: '+ err));
+}
 
 const login =  async (req, res) => {
     try {
@@ -65,7 +115,7 @@ const login =  async (req, res) => {
     }
 };
 
-const signup = (req,res)=>{
+const signup = async(req,res)=>{
     let { username, password, passwordCheck } = req.body;
 
     if (!username || !password || !passwordCheck)
@@ -80,33 +130,23 @@ const signup = (req,res)=>{
             .json({ msg: "Enter the same password twice for verification." });
 
     username = username.trim();
+    console.log(username)
 
-    User.find({
-        username: username
-    }, (err, previousUsers)=> {
-        if (err) {
-            res.send({
-                success: false,
-                message: "Error: Server Error."
-            });
-        } else if (previousUsers.length > 0) {
-            res.send({
-                success: false,
-                message: "Error: Account already exists."
-            });
-        }
-        else{
-            const newUser = new User();
-            newUser.username = username;
-            newUser.password = newUser.generateHash(password);
+    const existing = await User.findOne({username: username});
+    if(existing){
+        console.log(existing)
+        return res
+            .status(500)
+            .json({msg: "Account already exists."})
+    }
 
-            newUser.save()
-                .then(user => res.json('New record added!'))
-                .catch(err => res.status(400).json('Error' + err));
-        }
-    });
+    const newUser = new User();
+    newUser.username = username;
+    newUser.password = newUser.generateHash(password);
 
-
+    newUser.save()
+        .then(user => res.json('New record added!'))
+        .catch(err => res.status(400).json('Error' + err));
 };
 
 const tokenIsValid =  async (req, res) => {
@@ -135,5 +175,6 @@ export default {
     signup,
     getUserBuilds,
     login,
-    tokenIsValid
+    tokenIsValid,
+    update
 }
