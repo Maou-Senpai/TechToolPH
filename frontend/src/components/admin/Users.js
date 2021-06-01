@@ -1,5 +1,4 @@
 import React,{Component} from 'react';
-
 import { Link} from "react-router-dom";
 import axios from 'axios';
 import 'bootstrap';
@@ -55,8 +54,10 @@ export default class MyBuild extends Component {
 
     users(){
         return this.state.users.map(curUser =>{
-            return <User user = {curUser} key={curUser._id}
-                          />
+            if(curUser.username !== 'admin') {
+                return <User user={curUser} key={curUser._id}
+                />
+            }
         })
     }
 
