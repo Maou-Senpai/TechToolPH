@@ -23,7 +23,7 @@ const getBuild = (req,res)=>{
 
 const deleteBuild = (req,res)=>{
     Build.findByIdAndDelete(req.params.id)
-        .then(build => res.json('Record was deleted'))
+        .then(() => res.json('Record was deleted'))
         .catch(err => res.status(400).json('Error :'+ err));
 };
 

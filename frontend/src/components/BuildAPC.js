@@ -8,6 +8,7 @@ import checkLoggedIn from "./auth/UserAuth";
 import '../resources/BuildAPC.css';
 
 import {Autocomplete} from "@material-ui/lab";
+import SearchIcon from '@material-ui/icons/Search';
 
 const initialState = {
     build: "",
@@ -56,7 +57,8 @@ export default class BuildAPC extends Component {
         }
         this.setState({
             cpuOptions: [],
-            gpuOptions: []
+            gpuOptions: [],
+            gameDebateQuery: []
         })
 
         this.rename = this.rename.bind(this);
@@ -67,6 +69,7 @@ export default class BuildAPC extends Component {
         this.getBenchOne = this.getBenchOne.bind(this);
         this.getBenchTwo = this.getBenchTwo.bind(this);
         this.filter = this.filter.bind(this);
+        this.onAppQuery = this.onAppQuery.bind(this);
 
         axios.get(this.baseURL + "/benchmarks/gpu").then(res => {
             for (let bench of res.data) {
@@ -119,7 +122,6 @@ export default class BuildAPC extends Component {
                 .catch(err=>console.log(err));
         }
     }
-
 
     componentWillUnmount() {
         this.setState(initialState);
@@ -309,6 +311,9 @@ export default class BuildAPC extends Component {
                         )
                     })}
                 </div>
+
+                {/*Requirement Checker*/}
+                {this.requirement()}
             </div>
         )
     }
@@ -364,6 +369,65 @@ export default class BuildAPC extends Component {
         return (
             <div className="content" style={{width: "100%"}}>
                 {this.state.currentPage === "home" ? this.buildHome() : this.buildSelect()}
+            </div>
+        )
+    }
+
+    requirement() {
+        return (
+            <div style={{marginBottom: 50}}>
+                <hr style={{height: 20, margin: 50}} />
+                <h2 style={{textAlign: "center", marginBottom: 50}}>
+                    Recommended Requirement Checking (Game Debate)
+                </h2>
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    {this.appInput()}
+                </div>
+                {this.queryResults()}
+            </div>
+        )
+    }
+
+    queryResults() {
+        if (this.state.gameDebateQuery === undefined) return;
+
+        let results = [];
+        this.state.gameDebateQuery.forEach(val => {
+            results.push(
+                <div className="card shadow mb-4 prod-type-div" style={{marginTop: 50}}>
+                    <span style={{fontSize: 20, fontWeight: "bold", width: "100%", display: "flex"}}>
+                        <p className="prod-type-p">Hello</p>
+                        <Button onClick={this.changeToProducts}><AddShoppingCartIcon /></Button>
+                    </span>
+                </div>
+            )
+        })
+
+        return results;
+    }
+
+    onAppQuery(event) {
+        this.setState({
+            query: event.target.value
+        })
+    }
+
+    appQuery() {
+        axios.get(this.baseURL + "/requirements/search/" + this.state.query)
+            .then(() => console.log("Working"))
+            .then((e) => console.log(e));
+    }
+
+    appInput() {
+        return(
+            <div className="input-group" style={{justifyContent: "center", width: "100%"}}>
+                <input className="form-control bg-light border-0 small" onChange={this.onAppQuery}
+                       style={{height: 60, maxWidth: "50%"}} type="text" placeholder="Enter Game"/>
+                <div className="input-group-append">
+                    <Button type="button" style={{height: 60}} onClick={() => this.appQuery()}>
+                        <SearchIcon />
+                    </Button>
+                </div>
             </div>
         )
     }

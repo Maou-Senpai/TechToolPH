@@ -3,10 +3,6 @@ import bcrypt from 'bcryptjs';
 import User from '../models/user.model.js';
 import jwt from "jsonwebtoken";
 import Build from '../models/build.model.js';
-import auth from "../middleware/auth.js";
-
-
-
 
 
 const getUsers = (req,res)=>{
@@ -23,7 +19,7 @@ const getUser =  (req,res)=>{
 
 const deleteUser = (req,res)=>{
     User.findByIdAndDelete(req.params.id)
-        .then(user => res.json('User was deleted'))
+        .then(() => res.json('User was deleted'))
         .catch(err => res.status(400).json('Error :'+ err));
 };
 
@@ -49,14 +45,14 @@ const login =  async (req, res) => {
                 .status(400)
                 .json({ msg: "No account with this username has been registered." });
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user["password"]);
         if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+        const token = jwt.sign({ id: user["_id"] }, process.env["JWT_SECRET"]);
         res.json({
             token,
             user: {
-                id: user._id,
+                id: user["_id"],
                 username: user.username
             },
         });
@@ -101,7 +97,7 @@ const signup = (req,res)=>{
             newUser.password = newUser.generateHash(password);
 
             newUser.save()
-                .then(user => res.json('New record added!'))
+                .then(() => res.json('New record added!'))
                 .catch(err => res.status(400).json('Error' + err));
         }
     });
@@ -114,7 +110,7 @@ const tokenIsValid =  async (req, res) => {
         const token = req.header("x-auth-token");
         if (!token) return res.json(false);
 
-        const verified = jwt.verify(token, process.env.JWT_SECRET);
+        const verified = jwt.verify(token, process.env["JWT_SECRET"]);
         if (!verified) return res.json(false);
 
         const user = await User.findById(verified.id);

@@ -74,7 +74,7 @@ export default class MyBuild extends Component {
         return (
             <div className='MyBuilds text-center' style={{marginLeft: "20rem", marginTop: "5rem"}}>
                 {data?(<div>
-                <h1>MY BUILDS</h1>
+                <h1 style={{marginBottom: 30}}>MY BUILDS</h1>
                 <table className="table table-bordered table-hover">
                     <thead className="thead-dark">
                         <tr>

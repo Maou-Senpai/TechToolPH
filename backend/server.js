@@ -17,6 +17,7 @@ import buildRouter from './routes/build.js';
 import productRouter from './routes/product.js';
 import newsRouter from './routes/news.js';
 import benchmarksRouter from './routes/benchmarks.js';
+import requirementsRouter from './routes/requirements.js';
 
 import dotenv from 'dotenv';
 
@@ -36,6 +37,7 @@ app.use('/build', buildRouter);
 app.use('/products', productRouter);
 app.use('/user', userRouter);
 app.use('/benchmarks', benchmarksRouter);
+app.use('/requirements', requirementsRouter);
 
 //mongodb connection
 // noinspection JSUnresolvedVariable
