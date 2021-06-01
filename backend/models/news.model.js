@@ -12,9 +12,12 @@ const newsSchema = new Schema({
         type: String
     },
     time:{
-        type: String
+        type: Date
     },
     thumbnail:{
+        type: String
+    },
+    source:{
         type: String
     }
 },{ collection: 'news' });

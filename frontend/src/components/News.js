@@ -63,7 +63,7 @@ export default class News extends Component {
             return ((this.state.searchTerm === "") ||
                 (val.title.toLowerCase().includes(this.state.searchTerm.toLowerCase())) ||
                 (val.source.toLowerCase().includes(this.state.searchTerm.toLowerCase())));
-        }).slice(this.state.page * 20, this.state.page * 20 + 20);
+        }).slice(this.state.page * 10, (this.state.page + 1) * 20);
     }
 
     render() {
