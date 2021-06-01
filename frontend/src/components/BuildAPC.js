@@ -149,7 +149,8 @@ export default class BuildAPC extends Component {
         }
         if (this.props.match.params.id ) {
             alert("Build updated!");
-            axios.post(this.baseURL + "/build/update/"+this.props.match.params.id,[this.state.build,this.state.catalog,this.state.userId])
+            axios.post(this.baseURL + "/build/update/" +
+                this.props.match.params.id,[this.state.build,this.state.catalog,this.state.userId])
                 .then((res)=>console.log(res));
 
         }
@@ -178,6 +179,7 @@ export default class BuildAPC extends Component {
     }
 
     changeToProducts(e) {
+        console.log(e.currentTarget["value"]);
         this.setState({
             currentPage: e.currentTarget.value
         })
@@ -261,7 +263,9 @@ export default class BuildAPC extends Component {
                 <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div className="input-group">
-                            <input className="form-control bg-light border-0 small" type="text" placeholder={this.state.build !== ""?(this.state.build):("Untitled Build")} onChange={this.rename}/>
+                            <input className="form-control bg-light border-0 small" type="text"
+                                   placeholder={this.state.build !== "" ? (this.state.build) :
+                                       ("Untitled Build")} onChange={this.rename}/>
                             <div className="input-group-append">
                                 <button type="button" onClick={this.save} className="save-button">
                                     <SaveIcon />
@@ -291,8 +295,11 @@ export default class BuildAPC extends Component {
                                         <div className="card shadow mb-4"
                                             style={{margin: "auto", width: "70%", textAlign: "center", padding: 30}}>
                                             <span style={{display: "flex"}}>
-                                                <a key={spec["item_name"].uniqueID} href={spec["link"]} className="selected-a">{spec["item_name"]}</a>
-                                                <h2 key={spec["price"].uniqueID} style={{width: "45%", margin: 0, alignSelf: "center"}}>{spec["price"]}</h2>
+                                                <a key={spec["item_name"].uniqueID} href={spec["link"]} className="selected-a">
+                                                    {spec["item_name"]}
+                                                </a>
+                                                <h2 key={spec["price"].uniqueID} style={{width: "45%", margin: 0,
+                                                    alignSelf: "center"}}>{spec["price"]}</h2>
                                                 <Button onClick={this.delete} value={JSON.stringify(spec)}><DeleteIcon /></Button>
                                             </span>
                                         </div>
@@ -314,7 +321,8 @@ export default class BuildAPC extends Component {
                     <form className="navbar-search d-none d-sm-inline-block form-inline ml-md-3 my-2 my-md-0 mw-100"
                           style={{width: "100%", height: "100%"}}>
                         <div className="input-group" style={{height: "100%"}}>
-                            <input className="form-control bg-light border-0 small" type="text" style={{maxWidth: "20%", height: 70, alignSelf: "center"}}
+                            <input className="form-control bg-light border-0 small" type="text"
+                                   style={{maxWidth: "20%", height: 70, alignSelf: "center"}}
                                    placeholder="Enter Keyword" onChange={this.filter}/>
                             <div className="input-group-append" style={{width: "80%", display: "block"}}>
                                 {this.state.currentPage === "cpu" || this.state.currentPage === "gpu" ? this.compare() : null}
@@ -339,9 +347,11 @@ export default class BuildAPC extends Component {
                     return (
                         <div className="card shadow mb-4" style={{margin: "auto", width: "90%", padding: 30}}>
                             <span style={{height: "min-content", display: "flex", alignItems: "center"}}>
-                                <a className="prod-a" target="_blank" href={val[1]["link"]} rel="noreferrer">{val[1]["item_name"]}</a>
+                                <a className="prod-a" target="_blank" href={val[1]["link"]}
+                                   rel="noreferrer">{val[1]["item_name"]}</a>
                                 <span style={{width: "20%", textAlign: "right"}}>{val[1]["price"]}</span>
-                                <Button value={JSON.stringify(val[1])} onClick={this.changeToHome} style={{float: "right", width: 10}}><AddShoppingCartIcon /></Button>
+                                <Button value={JSON.stringify(val[1])} onClick={this.changeToHome}
+                                        style={{float: "right", width: 10}}><AddShoppingCartIcon /></Button>
                             </span>
                         </div>
                     )

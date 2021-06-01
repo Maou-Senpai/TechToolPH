@@ -28,7 +28,7 @@ export default function AuthOptions() {
             <li className="nav-item" style={{marginLeft: 10}}>
                 <Link to="/admin-settings" className="nav-link">
                     <SettingsIcon />
-                    <span style={{margin: 30}}>Admin Settings</span>
+                    <span style={{margin: 20}}>Admin Settings</span>
                 </Link>
             </li>
         );
@@ -41,7 +41,7 @@ export default function AuthOptions() {
             <li className="nav-item" style={{marginLeft: 10}}>
                 <div style={{cursor: "pointer"}} className="nav-link" onClick={logout}>
                     <ExitToAppIcon />
-                    <span style={{margin: 30}}>Log Out</span>
+                    <span style={{margin: 20}}>Log Out</span>
                 </div>
             </li>
         );
@@ -60,7 +60,7 @@ export default function AuthOptions() {
             <li className="nav-item" style={{marginLeft: 10}}>
                 <div style={{cursor: "pointer"}} className="nav-link" onClick={register}>
                     <ExitToAppIcon />
-                    <span style={{margin: 30}}>Register</span>
+                    <span style={{margin: 20}}>Register</span>
                 </div>
             </li>
         );
@@ -68,7 +68,7 @@ export default function AuthOptions() {
             <li className="nav-item" style={{marginLeft: 10}}>
                 <div style={{cursor: "pointer"}} className="nav-link" onClick={login}>
                     <ExitToAppIcon />
-                    <span style={{margin: 30}}>Log In</span>
+                    <span style={{margin: 20}}>Log In</span>
                 </div>
             </li>
         )

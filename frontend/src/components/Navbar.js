@@ -7,7 +7,7 @@ import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import AuthOptions from "./auth/Auth";
 import UserContext from "../components/context/UserContext";
 
-export default function Navbar(){
+export default function Navbar() {
     const { userData } = useContext(UserContext);
 
     return(
@@ -22,19 +22,19 @@ export default function Navbar(){
             <li className="nav-item" style={{marginLeft: 10}}>
                 <Link to="/news" className="nav-link">
                     <LibraryBooksIcon />
-                    <span style={{margin: 30}}>News</span>
+                    <span style={{margin: 20}}>News</span>
                 </Link>
             </li>
             <li className="nav-item" style={{marginLeft: 10}}>
                 <Link to="/build-pc" className="nav-link">
                     <GavelIcon />
-                    <span style={{margin: 30}}>Build a PC</span>
+                    <span style={{margin: 20}}>Build a PC</span>
                 </Link>
             </li>
             <li className="nav-item" style={{marginLeft: 10}}>
                 <Link to="/my-builds" className="nav-link">
                     <InboxIcon />
-                    <span style={{margin: 30}}>My Builds</span>
+                    <span style={{margin: 20}}>My Builds</span>
                 </Link>
             </li>
             <AuthOptions/>
@@ -45,12 +45,12 @@ export default function Navbar(){
             {userData.user ? (
                 <div className="nav-link">
                     <AccountCircleRoundedIcon />
-                    <span style={{margin: 30}}>{userData.user.username}</span>
+                    <span style={{margin: 20}}>{userData.user.username}</span>
                 </div>
             ) : (
                 <div className="nav-link">
                     <AccountCircleRoundedIcon />
-                    <span style={{margin: 30}}>Welcome Guest!</span>
+                    <span style={{margin: 20}}>Welcome Guest!</span>
                 </div>
             )}
             </li>
