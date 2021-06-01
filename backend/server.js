@@ -23,7 +23,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const port = process.env.port || 5000;
+// noinspection JSUnresolvedVariable
+const port = process.env.PORT || 5000;
 
 //middleware
 // noinspection JSCheckFunctionSignatures

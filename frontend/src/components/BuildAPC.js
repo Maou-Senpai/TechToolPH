@@ -35,6 +35,7 @@ const initialState = {
     searchTerm: "",
 }
 
+// noinspection DuplicatedCode
 export default class BuildAPC extends Component {
     partsType = {
         cpu: "CPU",
@@ -90,15 +91,15 @@ export default class BuildAPC extends Component {
     }
 
     componentDidMount() {
-        (async()=>{
+        (async () => {
             const data = await checkLoggedIn();
 
             this.state.userId = data.user.id;
         })();
 
-        if(this.props.match.params){
+        if (this.props.match.params) {
             axios.get(this.baseURL + '/build/' + this.props.match.params.id)
-                .then(res=>{
+                .then(res => {
                     this.setState({
                         build: res.data.build_name,
                         catalog: res.data.build,
@@ -106,12 +107,12 @@ export default class BuildAPC extends Component {
                         buildId: res.data._id
                     })
                     const sum = this.state.catalog.cpu.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
-                        +this.state.catalog.gpu.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
-                        +this.state.catalog.motherboard.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
-                        +this.state.catalog.ram.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
-                        +this.state.catalog.storage.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
-                        +this.state.catalog.psu.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
-                        +this.state.catalog.case.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0);
+                        + this.state.catalog.gpu.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
+                        + this.state.catalog.motherboard.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
+                        + this.state.catalog.ram.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
+                        + this.state.catalog.storage.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
+                        + this.state.catalog.psu.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0)
+                        + this.state.catalog.case.reduce((a, b) => a + parseFloat(b.price.replace(",","")), 0);
                     this.setState({
                         total: sum
                     })
@@ -157,7 +158,7 @@ export default class BuildAPC extends Component {
         else {
             if(localStorage.getItem('auth-token')!=="") {
 
-                if(this.state.build == ""){
+                if (this.state.build === "") {
                     alert("Rename your build first.")
                 }
                 else {

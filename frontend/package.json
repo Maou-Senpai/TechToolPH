@@ -25,7 +25,9 @@
     "react-table-scrollbar": "^0.1.11",
     "semantic-ui-css": "^2.2.14",
     "semantic-ui-react": "^2.0.3",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "@material-ui/icons": "^4.11.2",
+    "react-icons": "^4.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -51,9 +53,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@material-ui/icons": "^4.11.2",
-    "react-icons": "^4.2.0"
   }
 }
