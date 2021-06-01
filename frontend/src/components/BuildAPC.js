@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import SaveIcon from '@material-ui/icons/Save';
-import AddIcon from '@material-ui/icons/Add';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {Button, TextField} from "@material-ui/core";
@@ -145,13 +144,12 @@ export default class BuildAPC extends Component {
     }
 
     save() {
-        let baseUrl = process.env.baseURL || "http://localhost:5000";
         if (this.state===initialState) {
 
         }
         if (this.props.match.params.id ) {
             alert("Build updated!");
-            axios.post(baseUrl+"/build/update/"+this.props.match.params.id,[this.state.build,this.state.catalog,this.state.userId])
+            axios.post(this.baseURL + "/build/update/"+this.props.match.params.id,[this.state.build,this.state.catalog,this.state.userId])
                 .then((res)=>console.log(res));
 
         }
@@ -164,7 +162,7 @@ export default class BuildAPC extends Component {
                 else {
                     alert("Build saved!");
                 }
-                axios.post(baseUrl + "/build/add", [this.state.build, this.state.catalog, this.state.userId])
+                axios.post(this.baseURL + "/build/add", [this.state.build, this.state.catalog, this.state.userId])
                     .then((res) => {
                         console.log(res);
                         this.state.buildId = res.data._id;
@@ -184,9 +182,7 @@ export default class BuildAPC extends Component {
             currentPage: e.currentTarget.value
         })
 
-        let baseUrl = process.env.baseURL || "http://localhost:5000";
-
-        axios.get(baseUrl + "/products/" + e.currentTarget["value"])
+        axios.get(this.baseURL + "/products/" + e.currentTarget["value"])
             .then(res => {
                 this.setState({ loadedProducts: res.data })
             }).catch((e) => console.log(e));
@@ -202,8 +198,6 @@ export default class BuildAPC extends Component {
             benchTwo: null
         })
     }
-
-
 
     getBenchOne(event, val) {
         if(val) {
@@ -287,7 +281,7 @@ export default class BuildAPC extends Component {
                                 <div className="card shadow mb-4 prod-type-div">
                                     <span style={{fontSize: 20, fontWeight: "bold", width: "100%", display: "flex"}}>
                                         <p key={val[1].uniqueID} className="prod-type-p">{val[1]}</p>
-                                        <Button value={val[0]} onClick={this.changeToProducts}><AddIcon /></Button>
+                                        <Button value={val[0]} onClick={this.changeToProducts}><AddShoppingCartIcon /></Button>
                                     </span>
                                 </div>
 
