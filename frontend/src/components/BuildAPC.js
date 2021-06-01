@@ -156,7 +156,13 @@ export default class BuildAPC extends Component {
         }
         else {
             if(localStorage.getItem('auth-token')!=="") {
-                alert("Build saved!");
+
+                if(this.state.build == ""){
+                    alert("Rename your build first.")
+                }
+                else {
+                    alert("Build saved!");
+                }
                 axios.post(baseUrl + "/build/add", [this.state.build, this.state.catalog, this.state.userId])
                     .then((res) => {
                         console.log(res);
@@ -260,7 +266,7 @@ export default class BuildAPC extends Component {
                 <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div className="input-group">
-                            <input className="form-control bg-light border-0 small" type="text" placeholder="Untitled Build" onChange={this.rename}/>
+                            <input className="form-control bg-light border-0 small" type="text" placeholder={this.state.build !== ""?(this.state.build):("Untitled Build")} onChange={this.rename}/>
                             <div className="input-group-append">
                                 <button type="button" onClick={this.save} className="save-button">
                                     <SaveIcon />
