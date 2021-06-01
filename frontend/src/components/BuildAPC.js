@@ -228,8 +228,8 @@ export default class BuildAPC extends Component {
 
     compare() {
         return [
-            <div style={{display: "flex", justifyContent: "right", height: 75}}>
-                <p style={{alignSelf: "center", margin: 50}}>{this.state.benchOne}</p>
+            <div style={{display: "flex", justifyContent: "flex-end", height: 75}}>
+                <p style={{alignSelf: "center", margin: 50}}>Passmark Score:   {this.state.benchOne}</p>
                 <Autocomplete
                     id="combo-box-demo"
                     options={this.state.currentPage === "cpu" ? this.state.cpuOptions : this.state.gpuOptions}
@@ -240,8 +240,8 @@ export default class BuildAPC extends Component {
                 />
             </div>
             ,
-            <div style={{display: "flex", justifyContent: "right", height: 75}}>
-                <p style={{alignSelf: "center", margin: 50}}>{this.state.benchTwo}</p>
+            <div style={{display: "flex", justifyContent: "flex-end", height: 75}}>
+                <p style={{alignSelf: "center", margin: 50}}>Passmark Score:   {this.state.benchTwo}</p>
                 <Autocomplete
                     id="combo-box-demo"
                     options={this.state.currentPage === "cpu" ? this.state.cpuOptions : this.state.gpuOptions}
