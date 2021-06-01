@@ -3,14 +3,17 @@ import ClearIcon from '@material-ui/icons/Clear';
 import axios from 'axios';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import {Button, Modal} from "semantic-ui-react";
 
+// noinspection DuplicatedCode
 export default class News extends Component {
     constructor(p) {
         super(p);
         this.state = {
             loaded : false ,
             searchTerm: "",
-            page: 0
+            page: 0,
+            selected: null
         }
         this.filter = this.filter.bind(this);
         this.clear = this.clear.bind(this);
@@ -66,9 +69,40 @@ export default class News extends Component {
         }).slice(this.state.page * 10, (this.state.page + 1) * 20);
     }
 
+    redirect(e) {
+        this.setState({
+            selected: e,
+        })
+    }
+
+    popUp() {
+        if (this.state.selected === null) return null;
+        return (
+            <Modal open dimmer="blurring" className='modal'>
+                <Modal.Content style={{width: "100%", marginLeft:"0rem", marginTop:"0rem"}}>
+                    <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
+                        <img src={this.state.selected.thumbnail} style={{width: "80%"}}  alt={"Article Thumbnail"}/>
+                    </div>
+                    <h2 style={{textAlign: "center", marginTop: 20}}>You Clicked: {this.state.selected.title}</h2>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button onClick={() => this.setState({selected: null})}>Back</Button>
+                    <a target="_blank" href={this.state.selected.link} rel="noreferrer">
+                        <Button onClick={() => this.setState({selected: null})}>
+                            Redirect to {this.state.selected.source}
+                        </Button>
+                    </a>
+                </Modal.Actions>
+            </Modal>
+        )
+    }
+
+
     render() {
         return (
             <div className="content" style={{width: "100%"}}>
+                {this.popUp()}
+
                 {/*Top Bar*/}
                 <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
@@ -95,7 +129,7 @@ export default class News extends Component {
                     {/*Left*/}
                     <div style={{width: "49%", float: "left"}}>
                         {this.state.loaded ? this.actualFilter().map((val, idx) => {
-                            if (idx % 2 === 0) return <a target="_blank" href={val.link} rel="noreferrer">
+                            if (idx % 2 === 0) return <a href="javascript:void(0)" onClick={() => this.redirect(val)}>
                                 <div className="card shadow mb-4" style={{alignItems: "center", textAlign: "center", padding: 30}}>
                                     <img key={val.thumbnail.uniqueID} src={val.thumbnail}
                                          style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
@@ -111,7 +145,7 @@ export default class News extends Component {
                     {/*Right*/}
                     <div style={{width: "49%", float: "right"}}>
                         {this.state.loaded ? this.actualFilter().map((val, idx) => {
-                            if (idx % 2 !== 0) return <a target="_blank" href={val.link} rel="noreferrer">
+                            if (idx % 2 !== 0) return <a href="javascript:void(0)" onClick={() => this.redirect(val)}>
                                 <div className="card shadow mb-4" style={{alignItems: "center", textAlign: "center", padding: 30}}>
                                     <img key={val.thumbnail.uniqueID} src={val.thumbnail}
                                          style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
