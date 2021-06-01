@@ -34,23 +34,24 @@ export default function Navbar(){
             <li className="nav-item" style={{marginLeft: 10}}>
                 <Link to="/my-builds" className="nav-link">
                     <InboxIcon />
-                    <span style={{margin: 30}} >My Builds</span>
+                    <span style={{margin: 30}}>My Builds</span>
                 </Link>
             </li>
             <AuthOptions/>
 
             <hr className="sidebar-divider my-2" style={{color: "white", height: 3}}/>
 
-            <li className="nav-item" style={{marginLeft: 10, marginTop:10}}>
-            {userData.user?(
-                <>
-                <AccountCircleRoundedIcon style={{marginLeft: 20}} />
-                <span className="sidebar-brand-text mx-3" style={{color:'white'}} >{userData.user.username}</span>
-                </>
-            ):(
-                <>
-                    <h2 className="sidebar-brand-text mx-3" style={{color:'white'}}>Welcome Guest!</h2>
-                </>
+            <li className="nav-item" style={{marginLeft: 10}}>
+            {userData.user ? (
+                <div className="nav-link">
+                    <AccountCircleRoundedIcon />
+                    <span style={{margin: 30}}>{userData.user.username}</span>
+                </div>
+            ) : (
+                <div className="nav-link">
+                    <AccountCircleRoundedIcon />
+                    <span style={{margin: 30}}>Welcome Guest!</span>
+                </div>
             )}
             </li>
 

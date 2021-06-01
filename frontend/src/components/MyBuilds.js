@@ -59,8 +59,7 @@ export default class MyBuild extends Component {
 
     builds(){
         return this.state.build.map(curBuild =>{
-            return <Build build = {curBuild} deletebuild={this.deletebuild} key={curBuild._id}
-                          />
+            return <Build build = {curBuild} deletebuild={this.deletebuild} key={curBuild._id}/>
         })
     }
 
@@ -87,7 +86,7 @@ export default class MyBuild extends Component {
                     </tbody>
                 </table> </div>):(
                     <>
-                    <h2>Log in to access saved builds!</h2>
+                    <h2>Log In to Access Saved Builds!</h2>
                     </>)}
             </div>
 

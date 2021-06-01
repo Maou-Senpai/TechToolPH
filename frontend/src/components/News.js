@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ClearIcon from '@material-ui/icons/Clear';
 import axios from 'axios';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 export default class News extends Component {
     constructor(p) {
@@ -8,13 +10,16 @@ export default class News extends Component {
         this.state = {
             loaded : false ,
             searchTerm: "",
+            page: 0
         }
         this.filter = this.filter.bind(this);
         this.clear = this.clear.bind(this);
+        this.back = this.back.bind(this);
+        this.next = this.next.bind(this);
     }
 
     componentDidMount() {
-        let baseUrl = process.env.baseURL || "http://localhost:5000";
+        let baseUrl = process.env.REACT_APP_API || "http://localhost:5000";
         axios.get(baseUrl + "/news/")
             .then(res => {
                 this.setState({ news : res.data })
@@ -35,6 +40,32 @@ export default class News extends Component {
         })
     }
 
+    back() {
+        if (this.state.page > 0) {
+            window.scrollTo(0, 0);
+            this.setState({
+                page: this.state.page - 1
+            });
+        }
+    }
+
+    next() {
+        if (this.state.page * 20 + 20 < this.state.news.length) {
+            window.scrollTo(0, 0);
+            this.setState({
+                page: this.state.page + 1
+            });
+        }
+    }
+
+    actualFilter() {
+        return this.state.news.filter((val) =>{
+            return ((this.state.searchTerm === "") ||
+                (val.title.toLowerCase().includes(this.state.searchTerm.toLowerCase())) ||
+                (val.source.toLowerCase().includes(this.state.searchTerm.toLowerCase())));
+        }).slice(this.state.page * 20, this.state.page * 20 + 20);
+    }
+
     render() {
         return (
             <div className="content" style={{width: "100%"}}>
@@ -51,21 +82,26 @@ export default class News extends Component {
                             </div>
                         </div>
                     </form>
+                    <button className="btn btn-primary" style={{marginRight: 20}} onClick={this.back}>
+                        <ArrowBackIcon />
+                    </button>
+                    <button className="btn btn-primary" type="button" onClick={this.next}>
+                        <ArrowForwardIcon />
+                    </button>
                 </nav>
 
                 {/*Content*/}
                 <div className="container-fluid">
                     {/*Left*/}
                     <div style={{width: "49%", float: "left"}}>
-                        {this.state.loaded ? this.state.news.filter((val) =>{
-                            return ((this.state.searchTerm === "") ||
-                                (val.title.toLowerCase().includes(this.state.searchTerm.toLowerCase())))
-                        }).map((val, idx) => {
+                        {this.state.loaded ? this.actualFilter().map((val, idx) => {
                             if (idx % 2 === 0) return <a target="_blank" href={val.link} rel="noreferrer">
                                 <div className="card shadow mb-4" style={{alignItems: "center", textAlign: "center", padding: 30}}>
                                     <img key={val.thumbnail.uniqueID} src={val.thumbnail}
                                          style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
-                                    <span key={val.title.uniqueID} style={{fontSize: 20, fontWeight: "bold"}}>{val.title}</span>
+                                    <span key={val.title.uniqueID} style={{fontSize: 20, fontWeight: "bold"}}>
+                                        {val.source} --- {val.title}
+                                    </span>
                                 </div>
                             </a>
                             else return null;
@@ -74,15 +110,14 @@ export default class News extends Component {
 
                     {/*Right*/}
                     <div style={{width: "49%", float: "right"}}>
-                        {this.state.loaded ? this.state.news.filter((val) =>{
-                            return ((this.state.searchTerm === "") ||
-                                (val.title.toLowerCase().includes(this.state.searchTerm.toLowerCase())))
-                        }).map((val, idx) => {
+                        {this.state.loaded ? this.actualFilter().map((val, idx) => {
                             if (idx % 2 !== 0) return <a target="_blank" href={val.link} rel="noreferrer">
                                 <div className="card shadow mb-4" style={{alignItems: "center", textAlign: "center", padding: 30}}>
                                     <img key={val.thumbnail.uniqueID} src={val.thumbnail}
                                          style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
-                                    <span key={val.title.uniqueID} style={{fontSize: 20, fontWeight: "bold"}}>{val.title}</span>
+                                    <span key={val.title.uniqueID} style={{fontSize: 20, fontWeight: "bold"}}>
+                                        {val.source} --- {val.title}
+                                    </span>
                                 </div>
                             </a>
                             else return null;

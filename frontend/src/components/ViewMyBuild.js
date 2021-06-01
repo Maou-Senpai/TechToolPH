@@ -42,8 +42,7 @@ export default class ViewMyBuild extends Component {
 
     render() {
         return (
-            <Modal open dimmer="blurring" className='modal' >
-
+            <Modal open dimmer="blurring" className='modal'>
                 <Modal.Header>{this.state.build}</Modal.Header>
                 <Modal.Content scrolling style={{width: "100%", marginLeft:"0rem", marginTop:"0rem"}}>
                     <MyBuild dataFromParent = {this.props.match.params.id}/>
