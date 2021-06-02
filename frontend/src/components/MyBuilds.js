@@ -73,21 +73,23 @@ export default class MyBuild extends Component {
             data = false;
         }
         return (
-            <div className='MyBuilds text-center' style={{marginLeft: "20rem", marginTop: "5rem"}}>
+            <div className='MyBuilds text-center' style={{marginLeft: "14rem", marginTop: 30, width: "100%"}}>
                 {data?(<div>
-                <h1 style={{marginBottom: 30}}>MY BUILDS</h1>
-                <table className="table table-bordered table-hover">
-                    <thead className="thead-dark">
-                        <tr>
-                            <th>Build Name</th>
-                            <th>Last Modified</th>
-                            <th className="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.builds()}
-                    </tbody>
-                </table> </div>):(
+                <h1 style={{marginBottom: 40}}>MY BUILDS</h1>
+                <div style={{display: "flex", justifyContent: "center"}}>
+                    <table className="table table-bordered table-hover" style={{width: "80%"}}>
+                        <thead className="thead-dark">
+                            <tr>
+                                <th>Build Name</th>
+                                <th>Last Modified</th>
+                                <th className="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.builds()}
+                        </tbody>
+                    </table>
+                </div></div>):(
                     <>
                     <h2>Log In to Access Saved Builds!</h2>
                     </>)}

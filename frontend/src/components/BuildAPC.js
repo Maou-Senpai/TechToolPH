@@ -122,7 +122,7 @@ export default class BuildAPC extends Component {
                         total: sum
                     })
                 })
-                .catch(err=>console.log(err));
+                .catch(err => console.log(err));
         }
     }
 
@@ -156,11 +156,11 @@ export default class BuildAPC extends Component {
             alert("Build updated!");
             axios.post(this.baseURL + "/build/update/" +
                 this.props.match.params.id,[this.state.build,this.state.catalog,this.state.userId])
-                .then((res)=>console.log(res));
+                .then(res => console.log(res));
 
         }
         else {
-            if(localStorage.getItem('auth-token')!=="") {
+            if (localStorage.getItem('auth-token') !== "") {
 
                 if (this.state.build === "") {
                     alert("Rename your build first.")
@@ -176,9 +176,9 @@ export default class BuildAPC extends Component {
                         window.location = "/build-pc/"+res.data._id;
                     });
             }
-            else{
-                alert("Save feature is only available if you have an account");
-                console.log("Login first")
+            else {
+                alert("Save Feature is Only Available if You Have an Account");
+                console.log("Login First")
             }
         }
     }
@@ -391,6 +391,25 @@ export default class BuildAPC extends Component {
         )
     }
 
+    recParts(val) {
+        console.log(val);
+        const rtn = [];
+
+        val.cpu.forEach(cpu => {
+            rtn.push(
+                <p className="prod-type-p reqTitle">{cpu}</p>
+            )
+        })
+
+        val.gpu.forEach(gpu => {
+            rtn.push(
+                <p className="prod-type-p reqTitle">{gpu}</p>
+            )
+        })
+
+        return rtn;
+    }
+
     queryResults() {
         if (this.state.gameDebateQuery !== undefined) {
             let results = [];
@@ -399,8 +418,7 @@ export default class BuildAPC extends Component {
                     <div className="card shadow mb-4 prod-type-div req">
                         <img src={val.image}  alt="Game Cover" className="reqCover" />
                         <p className="prod-type-p reqTitle">{val.title}</p>
-                        {val.cpu.map(val => <p className="prod-type-p reqTitle">{val}</p>)}
-                        {val.gpu.map(val => <p className="prod-type-p reqTitle">{val}</p>)}
+                        {this.recParts(val)}
                     </div>
                 )
             })
@@ -421,22 +439,31 @@ export default class BuildAPC extends Component {
                 loading: true
             })
 
-            console.log(this.state.query);
-
             await axios.get(this.baseURL + "/requirements/search/" + this.state.query)
                 .then(res => {
-                    console.log(res.data);
                     this.setState({
                         gameDebateQuery: res.data
-                    })
+                    });
                 });
+
+            const toThis = this.gamesCard;
+            toThis.scrollIntoView({ behavior: "smooth" });
+
+            // Get Actual Parts
+            this.state.gameDebateQuery.forEach(val => {
+                axios.post(this.baseURL + "/requirements/link", {
+                    link: val.link
+                }).then(res => {
+                    val.cpu.push(...res.data.cpu);
+                    val.gpu.push(...res.data.gpu);
+                }).then(() => {
+                    this.setState({ partsLoaded: true });
+                });
+            });
 
             await this.setState({
                 loading: false
             });
-
-            const toThis = this.gamesCard;
-            toThis.scrollIntoView({ behavior: "smooth" });
         }
     }
 
@@ -444,7 +471,8 @@ export default class BuildAPC extends Component {
         return(
             <div className="input-group" style={{justifyContent: "center", width: "100%"}}>
                 <input className="form-control bg-light border-0 small" onChange={this.onAppQuery} onKeyPress={this.onReqKey}
-                       style={{height: 60, maxWidth: "50%"}} type="text" placeholder="Enter Game (3 or More Characters)"/>
+                       style={{zIndex: 0, height: 60, maxWidth: "50%"}} type="text"
+                       placeholder="Enter Game (3 or More Characters)"/>
                 <div className="input-group-append">
                     <Button type="button" style={{height: 60, marginLeft: 10 ,marginRight: 20}} onClick={() => this.appQuery()}>
                         <SearchIcon />

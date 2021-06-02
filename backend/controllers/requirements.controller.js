@@ -5,8 +5,7 @@ const {parse} = htmlParser;
 const search = async (req, res) => {
     const query = req.params.id.split(/\s+/).join("+");
     const baseURL = "https://game-debate.com";
-    let html = await fetch(baseURL + "/search/games?search=" + query)
-        .then(res => res.text());
+    let html = await fetch(baseURL + "/search/games?search=" + query).then(res => res.text());
     let doc = parse(html);
 
     let rtn = [];
@@ -19,28 +18,26 @@ const search = async (req, res) => {
         rtn.push({
             "title": title,
             "link": link,
-            "image": image
+            "image": image,
+            "cpu": [],
+            "gpu": []
         })
     })
 
-    rtn = rtn.slice(0, 5);
-    for (let game of rtn) {
-        console.log(game);
-        await scrapeReco(game);
-    }
-
-    if (rtn.length > 0) return res.json(rtn);
+    if (rtn.length > 0) return res.json(rtn.slice(0, 5));
     else res.json("Error");
 };
 
-async function scrapeReco(game) {
-    const html = await fetch(game.link)
-        .then(res => res.text());
+const scrape = async (req, res) => {
+    const html = await fetch(req.body.link).then(res => res.text());
     const doc = await parse(html);
 
     const types = ["cpu", "gpu"];
+    const reco = {};
     // noinspection JSUnresolvedFunction
     const partsDivs = doc.querySelectorAll('div.systemRequirementsLink');
+    if (partsDivs.length === 0) return res.json({"cpu": ["N/A"], "gpu": ["N/A"]});
+
     for (let i = partsDivs.length - 2; i < partsDivs.length; i++) {
         const val = partsDivs[i];
         const parts = [];
@@ -48,10 +45,13 @@ async function scrapeReco(game) {
         for (let i = 0; i < partsElems.length; i++) {
             parts.push(partsElems[i].textContent);
         }
-        game[types.shift()] = parts;
+        reco[types.shift()] = parts;
     }
+
+    return res.json(reco);
 }
 
 export default {
-    search
+    search,
+    scrape
 }

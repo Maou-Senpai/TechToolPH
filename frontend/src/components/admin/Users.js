@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import TableScrollbar from 'react-table-scrollbar';
 
+import '../../resources/Users.css';
+
 const User = props => {
     return(
         <tr>
@@ -52,7 +54,7 @@ export default class MyBuild extends Component {
             .catch(err=>console.log(err));
     }
 
-    users(){
+    users() {
         return this.state.users.map(curUser =>{
             if(curUser.username !== 'admin') {
                 return <User user={curUser} key={curUser._id}
@@ -61,12 +63,12 @@ export default class MyBuild extends Component {
         })
     }
 
-    render(){
+    render() {
         return (
-            <div className='MyBuilds text-center' style={{marginLeft: "-5rem", marginTop: "2rem"}}>
-                <h1>USERS</h1>
-                    <TableScrollbar rows={10} >
-                        <table className="table table-bordered table-hover" style={{width:"400px"}}>
+            <div className='MyBuilds text-center' style={{marginTop: 50, marginBottom: 30}}>
+                <h1 style={{marginBottom: 40}}>USERS</h1>
+                    <TableScrollbar rows={10} style={{overflow: "hidden"}}>
+                        <table className="table table-bordered table-hover" style={{width: "70%"}}>
                             <thead className="thead-dark" >
                             <tr>
                                 <th>Username</th>
@@ -84,4 +86,3 @@ export default class MyBuild extends Component {
         );
     }
 }
-
