@@ -58,3 +58,13 @@ h3 {
 .reqTitle {
     font-size: 20px;
 }
+
+.details {
+    max-width: 300px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right-style: solid;
+    padding-right: 20px;
+}

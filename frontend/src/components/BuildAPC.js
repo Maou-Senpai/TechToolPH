@@ -392,22 +392,30 @@ export default class BuildAPC extends Component {
     }
 
     recParts(val) {
-        console.log(val);
         const rtn = [];
 
-        val.cpu.forEach(cpu => {
-            rtn.push(
-                <p className="prod-type-p reqTitle">{cpu}</p>
-            )
-        })
+        rtn.push(<h2 className="prod-type-p reqTitle" style={{fontSize: 18, fontWeight: "bold", marginTop: 10}}>
+            Recommended CPU:
+        </h2>);
+        rtn.push(<p className="prod-type-p reqTitle" style={{fontSize: 16}}>{val.cpu.join(" or ")}</p>);
 
-        val.gpu.forEach(gpu => {
-            rtn.push(
-                <p className="prod-type-p reqTitle">{gpu}</p>
-            )
-        })
+        rtn.push(<h3 className="prod-type-p reqTitle" style={{fontSize: 18, fontWeight: "bold", marginTop: 10}}>
+            Recommended GPU:
+        </h3>);
+        rtn.push(<p className="prod-type-p reqTitle" style={{fontSize: 16}}>{val.gpu.join(" or ")}</p>);
 
         return rtn;
+    }
+
+    availProd(val) {
+        return (
+            <div className="card shadow mb-4 prod-type-div">
+                <span style={{fontSize: 20, fontWeight: "bold", width: "100%", display: "flex"}}>
+                    <p className="prod-type-p">Balls</p>
+                    <Button onClick={this.changeToProducts}><AddShoppingCartIcon /></Button>
+                </span>
+            </div>
+        )
     }
 
     queryResults() {
@@ -416,9 +424,14 @@ export default class BuildAPC extends Component {
             this.state.gameDebateQuery.slice(0, 5).forEach(val => {
                 results.push(
                     <div className="card shadow mb-4 prod-type-div req">
-                        <img src={val.image}  alt="Game Cover" className="reqCover" />
-                        <p className="prod-type-p reqTitle">{val.title}</p>
-                        {this.recParts(val)}
+                        <div style={{display: "flex", flexDirection: "column", justifyContent: "center"}}>
+                            <img src={val.image}  alt="Game Cover" className="reqCover" />
+                        </div>
+                        <div className="details">
+                            <p className="prod-type-p reqTitle" style={{fontSize: 22, fontWeight: "bold"}}>{val.title}</p>
+                            {this.recParts(val)}}
+                        </div>
+                        {/*{this.availProd(val)*/}
                     </div>
                 )
             })
