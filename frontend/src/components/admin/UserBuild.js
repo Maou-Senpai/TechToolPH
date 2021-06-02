@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from "axios";
 import '../../resources/BuildAPC.css';
+import {Image} from "semantic-ui-react";
 
 
 
@@ -92,7 +93,7 @@ export default class UserBuild extends Component {
                         return (
                             <div>
                                 {/*Product Type*/}
-                                <div className="card shadow mb-4 prod-type-div">
+                                <div className="card shadow mb-4 prod-type-div-view" >
                                     <span style={{fontSize: 15, fontWeight: "bold", width: "100%", display: "flex" }}>
                                         <p key={val[1].uniqueID} className="prod-type-p">{val[1]}</p>
                                     </span>
@@ -102,9 +103,10 @@ export default class UserBuild extends Component {
                                 {this.state.catalog[val[0]].map(spec => {
                                     return (
                                         <div className="card shadow mb-4"
-                                            style={{margin: "auto", width: "70%", textAlign: "center", padding: 30}}>
+                                            style={{margin: "auto", width: "70%", textAlign: "center", padding: 10}}>
                                             <span style={{display: "flex"}}>
-                                                <a key={spec["item_name"].uniqueID} href={spec["link"]} className="selected-a">{spec["item_name"]}</a>
+                                                <Image wrapped spaced size="small"  src={'http:'+spec["image"]} alt={"Product thumbnail"}/>
+                                                <a key={spec["item_name"].uniqueID} href={spec["link"]} className="selected-b">{spec["item_name"]}</a>
                                                 <h2 key={spec["price"].uniqueID} style={{width: "45%", margin: 0, alignSelf: "center"}}>{spec["price"]}</h2>
                                             </span>
                                         </div>

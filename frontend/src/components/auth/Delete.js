@@ -28,7 +28,7 @@ export default function Delete(props){
     }
 
     return (
-        <Modal open dimmer="blurring" className='modal' >
+        <Modal open dimmer="blurring" className='modal' size="mini">
 
             <Modal.Header>Delete Account</Modal.Header>
             <Modal.Content scrolling style={{width: "100%", marginLeft:"0rem", marginTop:"0rem"}}>

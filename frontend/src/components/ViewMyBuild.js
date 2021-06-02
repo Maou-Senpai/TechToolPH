@@ -33,6 +33,7 @@ export default class ViewMyBuild extends Component {
     baseURL = process.env.REACT_APP_API || "http://localhost:5000";
 
     componentDidMount() {
+        console.log(this.props.location);
         axios.get(this.baseURL + "/build/" + this.props.match.params.id)
             .then(res=>{
                 this.setState({
@@ -44,7 +45,7 @@ export default class ViewMyBuild extends Component {
 
     render() {
         return (
-            <Modal open dimmer="blurring" className='modal'>
+            <Modal open dimmer="blurring" className='modal' size={"large"}>
                 <Modal.Header>{this.state.build}</Modal.Header>
                 <Modal.Content scrolling style={{width: "100%", marginLeft:"0rem", marginTop:"0rem"}}>
                     <MyBuild dataFromParent = {this.props.match.params.id}/>

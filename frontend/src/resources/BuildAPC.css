@@ -11,7 +11,7 @@ h3 {
 .prod-type-div {
     margin: auto;
     width: 90%;
-    padding: 30px;
+    padding: 25px;
 }
 
 .prod-type-p {
@@ -34,6 +34,7 @@ h3 {
     width: 80%;
     float: left;
     margin-bottom: 0;
+    font-size: 15px;
 }
 
 .content {
@@ -42,4 +43,22 @@ h3 {
 
 .compare {
     float: right;
+}
+
+/*
+UserBuild
+ */
+.prod-type-div-view {
+    margin: auto;
+    width: 90%;
+    padding: 20px;
+}
+
+.selected-b {
+    font-size: 20px;
+    width: 100%;
+    align-self: center;
+    text-align: left;
+    display: flex;
+    float: left;
 }

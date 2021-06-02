@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import Axios from "axios";
 import ErrorNotice from "../misc/ErrorNotice";
-import './form.css';
+import '../../resources/Form.css';
 
 export default function Login() {
     const [username, setUsername] = useState();

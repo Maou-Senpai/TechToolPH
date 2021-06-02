@@ -8,6 +8,7 @@ import checkLoggedIn from "./auth/UserAuth";
 import '../resources/BuildAPC.css';
 
 import {Autocomplete} from "@material-ui/lab";
+import {Image} from "semantic-ui-react";
 
 const initialState = {
     build: "",
@@ -293,8 +294,9 @@ export default class BuildAPC extends Component {
                                 {this.state.catalog[val[0]].map(spec => {
                                     return (
                                         <div className="card shadow mb-4"
-                                            style={{margin: "auto", width: "70%", textAlign: "center", padding: 30}}>
+                                            style={{margin: "auto", width: "70%", textAlign: "center", padding: 10}}>
                                             <span style={{display: "flex"}}>
+                                                <Image wrapped spaced size="small" verticalAlign='middle' src={'http:'+spec["image"]} alt={"Product thumbnail"}/>
                                                 <a key={spec["item_name"].uniqueID} href={spec["link"]} className="selected-a">
                                                     {spec["item_name"]}
                                                 </a>
@@ -322,7 +324,7 @@ export default class BuildAPC extends Component {
                           style={{width: "100%", height: "100%"}}>
                         <div className="input-group" style={{height: "100%"}}>
                             <input className="form-control bg-light border-0 small" type="text"
-                                   style={{maxWidth: "20%", height: 70, alignSelf: "center"}}
+                                   style={{maxWidth: "20%", height: 40, alignSelf: "center"}}
                                    placeholder="Enter Keyword" onChange={this.filter}/>
                             <div className="input-group-append" style={{width: "80%", display: "block"}}>
                                 {this.state.currentPage === "cpu" || this.state.currentPage === "gpu" ? this.compare() : null}
@@ -345,8 +347,9 @@ export default class BuildAPC extends Component {
                         (val[1]["item_name"].toLowerCase().includes(this.state.searchTerm.toLowerCase())))
                 }).map((val) => {
                     return (
-                        <div className="card shadow mb-4" style={{margin: "auto", width: "90%", padding: 30}}>
+                        <div className="card shadow mb-4" style={{margin: "auto", width: "90%", padding: 5}}>
                             <span style={{height: "min-content", display: "flex", alignItems: "center"}}>
+                                <Image wrapped spaced size="tiny" verticalAlign="middle" src={'http:'+val[1]["image"]} alt={"Product thumbnail"}/>
                                 <a className="prod-a" target="_blank" href={val[1]["link"]}
                                    rel="noreferrer">{val[1]["item_name"]}</a>
                                 <span style={{width: "20%", textAlign: "right"}}>{val[1]["price"]}</span>

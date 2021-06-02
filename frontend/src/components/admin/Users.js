@@ -12,7 +12,7 @@ const User = props => {
             <td>{props.user.username}</td>
             <td>{props.user.updatedAt}</td>
             <td className="text-center">
-                <Link to={'/view/'+ props.user._id} className="btn btn-sm btn-danger">View</Link>
+                <Link to={{pathname:'/view/'+ props.user._id,state:{username: props.user.username}}}  className="btn btn-sm btn-danger">View</Link>
             </td>
         </tr>
     )
@@ -63,10 +63,10 @@ export default class MyBuild extends Component {
 
     render(){
         return (
-            <div className='MyBuilds text-center' style={{marginLeft: "20rem", marginTop: "1rem"}}>
+            <div className='MyBuilds text-center' style={{marginLeft: "-5rem", marginTop: "2rem"}}>
                 <h1>USERS</h1>
                     <TableScrollbar rows={10} >
-                        <table className="table table-bordered table-hover">
+                        <table className="table table-bordered table-hover" style={{width:"400px"}}>
                             <thead className="thead-dark" >
                             <tr>
                                 <th>Username</th>
