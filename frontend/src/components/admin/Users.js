@@ -65,10 +65,10 @@ export default class MyBuild extends Component {
 
     render() {
         return (
-            <div className='MyBuilds text-center' style={{marginTop: 50, marginBottom: 30}}>
-                <h1 style={{marginBottom: 40}}>USERS</h1>
-                    <TableScrollbar rows={10} style={{overflow: "hidden"}}>
-                        <table className="table table-bordered table-hover" style={{width: "70%"}}>
+            <div className='MyBuilds text-center' style={{marginTop: 50, marginBottom: 30, width:"70%"}}>
+                <h1>USERS</h1>
+                    <TableScrollbar rows={10}>
+                        <table className="table table-bordered table-hover" style={{width: "100%"}} >
                             <thead className="thead-dark" >
                             <tr>
                                 <th>Username</th>
@@ -86,3 +86,4 @@ export default class MyBuild extends Component {
         );
     }
 }
+

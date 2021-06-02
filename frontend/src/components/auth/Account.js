@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import {Link, useHistory } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import Axios from "axios";
-import ErrorNotice from "../misc/ErrorNotice";
+import ErrorNotice from "./ErrorNotice";
 import checkLoggedIn from "./UserAuth";
 import {Button} from 'semantic-ui-react';
 

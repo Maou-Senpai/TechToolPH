@@ -109,7 +109,7 @@ export default class UserBuilds extends Component {
 
     render() {
         return (
-            <Modal open dimmer="blurring" className='modal' >
+            <Modal open dimmer="blurring" className='modal'>
 
                 <Modal.Header>{this.props.location.state.username}</Modal.Header>
                 <Modal.Content scrolling style={{width: "100%", marginLeft:"0rem", marginTop:"0rem"}}>

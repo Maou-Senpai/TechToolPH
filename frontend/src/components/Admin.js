@@ -3,6 +3,7 @@ import axios from "axios";
 import Users from '../components/admin/Users';
 import {Button, Modal} from "semantic-ui-react";
 import {Link} from "react-router-dom";
+import {LoopCircleLoading} from "react-loadingg";
 
 export default class Admin extends Component {
     constructor(p){
@@ -84,37 +85,33 @@ export default class Admin extends Component {
     }
 
     render(){
-        if (this.state.response === "" && this.state.click === 1) {
+        if(this.state.response=="" && this.state.click==1){
             return(
             <Modal open dimmer="blurring" className='modal' size="mini" >
 
-                <Modal.Header>Updating...</Modal.Header>
+                <Modal.Header>Updating..</Modal.Header>
                 <Modal.Content scrolling style={{width: "100%", marginLeft:"0rem", marginTop:"0rem"}}>
-                    Please Wait
+                    Please wait
+                    <LoopCircleLoading/>
                 </Modal.Content>
             </Modal>
             )
         }
 
         return (
-            <div className='Admin' style={{marginLeft: "14rem", width: "100%"}}>
-                <div style={{textAlign: "center", marginTop: 30}}>
-                    {this.state.response!==""?(this.responseModal()):(<></>)}
-                    <h1 style={{marginBottom: 40}}>ADMIN SETTINGS</h1>
-                    <div style={{display: "flex", justifyContent: "center"}}>
-                        <Button className="News" type="button" onClick={this.scrapeNews}>
-                            Scrape News
-                        </Button>
-                        <Button className="Product" type="button" onClick={this.scrapeProduct}
-                                style={{marginLeft: 30, marginRight: 30}}>
-                            Scrape Product
-                        </Button>
-                        <Button className="Benchmarks" type="button" onClick={this.scrapeBenchmark}>
-                            Scrape Benchmarks
-                        </Button>
-                    </div>
-                </div>
-                <Users />
+            <div className='Admin' style={{marginLeft: "20rem", marginTop:"2rem", width:"100%"}}>
+                {this.state.response!==""?(this.responseModal()):(<></>)}
+                <h1> ADMIN SETTINGS</h1>
+                <Button className="News" type="button" onClick={this.scrapeNews}>
+                    News
+                </Button>
+                <Button className="Product" type="button" onClick={this.scrapeProduct}>
+                    Product
+                </Button>
+                <Button className="Benchmarks" type="button" onClick={this.scrapeBenchmark}>
+                    Benchmarks
+                </Button>
+                <Users style={{marginTop: "5rem"}}/>
             </div>
         )
     }

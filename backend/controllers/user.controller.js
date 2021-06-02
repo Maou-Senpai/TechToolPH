@@ -69,6 +69,16 @@ const update = async(req,res)=>{
         }
     }
 
+    username = username.trim();
+    console.log(username)
+
+    const existing = await User.findOne({username: username});
+    if(existing){
+        console.log(existing)
+        return res
+            .status(500)
+            .json({msg: "Account already exists."})
+    }
 
     User.findById((req.params.id))
         .then(user => {

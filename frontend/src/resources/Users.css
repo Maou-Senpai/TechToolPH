@@ -1,5 +1,4 @@
 .TableScrollbar {
-    overflow: hidden !important;
     display: flex;
     justify-content: center;
 }
