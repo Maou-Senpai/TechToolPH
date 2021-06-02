@@ -10,7 +10,7 @@ import '../resources/BuildAPC.css';
 import { Autocomplete } from "@material-ui/lab";
 import SearchIcon from '@material-ui/icons/Search';
 import { LoopCircleLoading } from 'react-loadingg';
-import {Image} from "semantic-ui-react";
+import stringSimilarity from 'string-similarity';
 
 const initialState = {
     build: "",
@@ -35,6 +35,9 @@ const initialState = {
     benchOne: null,
     benchTwo: null,
     searchTerm: "",
+    availCPU: null,
+    availGPU: null,
+    avail: []
 }
 
 // noinspection DuplicatedCode
@@ -74,6 +77,7 @@ export default class BuildAPC extends Component {
         this.filter = this.filter.bind(this);
         this.onAppQuery = this.onAppQuery.bind(this);
         this.onReqKey = this.onReqKey.bind(this);
+        this.onRenameEnter = this.onRenameEnter.bind(this);
 
         axios.get(this.baseURL + "/benchmarks/gpu").then(res => {
             for (let bench of res.data) {
@@ -140,8 +144,12 @@ export default class BuildAPC extends Component {
     delete(event) {
         const selected = JSON.parse(event.currentTarget.value)
         const temp = this.state.catalog;
+        let deleted = false;
         temp[selected["type"]] = this.state.catalog[selected["type"]].filter(val => {
-            return val["_id"] !== selected ["_id"];
+            if (val["_id"] === selected["_id"] && !deleted) {
+                deleted = true;
+                return false;
+            } else return true;
         })
         this.setState({
             catalog: temp,
@@ -164,10 +172,10 @@ export default class BuildAPC extends Component {
             if (localStorage.getItem('auth-token') !== "") {
 
                 if (this.state.build === "") {
-                    alert("Rename your build first.")
+                    alert("Rename Your Build First.")
                 }
                 else {
-                    alert("Build saved!");
+                    alert("Build Saved!");
                 }
                 axios.post(this.baseURL + "/build/add", [this.state.build, this.state.catalog, this.state.userId])
                     .then((res) => {
@@ -262,6 +270,14 @@ export default class BuildAPC extends Component {
         ]
     }
 
+    onRenameEnter(e) {
+        console.log(e)
+        if (e.key === "Enter") {
+            e.preventDefault();
+            this.save();
+        }
+    }
+
     buildHome() {
         return (
             <div>
@@ -271,7 +287,7 @@ export default class BuildAPC extends Component {
                         <div className="input-group">
                             <input className="form-control bg-light border-0 small" type="text"
                                    placeholder={this.state.build !== "" ? (this.state.build) :
-                                       ("Untitled Build")} onChange={this.rename}/>
+                                       ("Untitled Build")} onChange={this.rename} onKeyPress={this.onRenameEnter}/>
                             <div className="input-group-append">
                                 <button type="button" onClick={this.save} className="save-button">
                                     <SaveIcon />
@@ -298,15 +314,13 @@ export default class BuildAPC extends Component {
                                 {/*Product Name*/}
                                 {this.state.catalog[val[0]].map(spec => {
                                     return (
-                                        <div className="card shadow mb-4"
-                                            style={{margin: "auto", width: "70%", textAlign: "center", padding: 30}}>
-                                            <span style={{display: "flex"}}>
-                                                <Image wrapped spaced size="tiny" verticalAlign='middle'  src={'http:'+spec["image"]} alt={"Product thumbnail"}/>
+                                        <div className="card shadow mb-4 selected-div">
+                                            <img src={spec.image} alt="Product Image" className="selected-icon" />
+                                            <span style={{display: "flex", width: "90%"}}>
                                                 <a key={spec["item_name"].uniqueID} href={spec["link"]} className="selected-a">
                                                     {spec["item_name"]}
                                                 </a>
-                                                <h2 key={spec["price"].uniqueID} style={{width: "45%", margin: 0,
-                                                    alignSelf: "center"}}>{spec["price"]}</h2>
+                                                <h2 key={spec["price"].uniqueID} className="selected-price">{spec["price"]}</h2>
                                                 <Button onClick={this.delete} value={JSON.stringify(spec)}><DeleteIcon /></Button>
                                             </span>
                                         </div>
@@ -323,22 +337,58 @@ export default class BuildAPC extends Component {
         )
     }
 
+    sortAndFilter(option) {
+        console.log(this.state.loadedProducts);
+        let sorted;
+
+        if (option !== undefined) {
+            if (option === 0) {
+                sorted = Object.entries(this.state.loadedProducts).sort((a, b) => {
+                    return parseFloat(a[1].price.replace(",", "")) - parseFloat(b[1].price.replace(",", ""));
+                });
+            } else if (option === 1) {
+                sorted = Object.entries(this.state.loadedProducts).sort((a, b) => {
+                    return parseFloat(b[1].price.replace(",", "")) - parseFloat(a[1].price.replace(",", ""));
+                });
+            }
+
+            console.log(sorted);
+            const newLoaded = {};
+            sorted.forEach((val, idx) => {
+                newLoaded[idx] = val[1];
+            })
+            console.log(newLoaded);
+        }
+
+        return Object.entries(this.state.loadedProducts).filter((val) => {
+            return ((this.state.searchTerm === "") ||
+                (val[1]["item_name"].toLowerCase().includes(this.state.searchTerm.toLowerCase())) ||
+                (val[1]["source"].toLowerCase().includes(this.state.searchTerm.toLowerCase())))
+        })
+    }
+
+    prodFilter() {
+        return (
+            <div className="filter-div">
+                <input className="form-control bg-light border-0 small filter-input"
+                       type="text" placeholder="Enter Keyword" onChange={this.filter}/>
+                <Button className="sort" onClick={() => this.sortAndFilter(0)}>Price Ascending</Button>
+                <Button className="sort" onClick={() => this.sortAndFilter(1)}>Price Descending</Button>
+            </div>
+        )
+    }
+
     buildSelect() {
         return (
             // Topbar
             <div>
                 <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style={{height: "20%"}}>
-                    <form className="navbar-search d-none d-sm-inline-block form-inline ml-md-3 my-2 my-md-0 mw-100"
-                          style={{width: "100%", height: "100%"}}>
-                        <div className="input-group" style={{height: "100%"}}>
-                            <input className="form-control bg-light border-0 small" type="text"
-                                   style={{maxWidth: "20%", height: 50, alignSelf: "center"}}
-                                   placeholder="Enter Keyword" onChange={this.filter}/>
-                            <div className="input-group-append" style={{width: "80%", display: "block"}}>
-                                {this.state.currentPage === "cpu" || this.state.currentPage === "gpu" ? this.compare() : null}
-                            </div>
+                    <div className="selection-top">
+                        {this.prodFilter()}
+                        <div className="input-group compare-div">
+                            {this.state.currentPage === "cpu" || this.state.currentPage === "gpu" ? this.compare() : null}
                         </div>
-                    </form>
+                    </div>
                 </nav>
 
                 {this.state.loadedProducts != null ? this.buildSelectContent() : null}
@@ -350,17 +400,14 @@ export default class BuildAPC extends Component {
         return (
             // Content
             <div className="container-fluid" style={{width: "100%"}}>
-                {Object.entries(this.state.loadedProducts).filter((val) =>{
-                    return ((this.state.searchTerm === "") ||
-                        (val[1]["item_name"].toLowerCase().includes(this.state.searchTerm.toLowerCase())))
-                }).map((val) => {
+                {this.sortAndFilter().map((val) => {
                     return (
-                        <div className="card shadow mb-4" style={{margin: "auto", width: "90%", padding: 20}}>
+                        <div className="card shadow mb-4" style={{margin: "auto", width: "90%", padding: 30}}>
                             <span style={{height: "min-content", display: "flex", alignItems: "center"}}>
-                                <Image wrapped spaced size="tiny" verticalAlign='middle'  src={'http:'+val[1]["image"]} alt={"Product thumbnail"}/>
+                                <img src={val[1].image} alt="Product Image" className="selected-icon" />
                                 <a className="prod-a" target="_blank" href={val[1]["link"]}
                                    rel="noreferrer">{val[1]["item_name"]}</a>
-                                <span style={{width: "20%", textAlign: "right"}}>{val[1]["price"]}</span>
+                                <span className="prod-span">{val[1]["price"]}</span>
                                 <Button value={JSON.stringify(val[1])} onClick={this.changeToHome}
                                         style={{float: "right", width: 10}}><AddShoppingCartIcon /></Button>
                             </span>
@@ -383,8 +430,8 @@ export default class BuildAPC extends Component {
         return (
             <div style={{marginBottom: 50}}>
                 <hr style={{height: 20, margin: 50}} />
-                <h2 style={{textAlign: "center", marginBottom: 50}} ref={el => this.gamesCard = el}>
-                    Recommended Requirement Checking (Game Debate)
+                <h2 style={{textAlign: "center", marginBottom: 50, marginRight: 40}} ref={el => this.gamesCard = el}>
+                    Product Recommendation Based on Requirements
                 </h2>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     {this.appInput()}
@@ -411,14 +458,33 @@ export default class BuildAPC extends Component {
     }
 
     availProd(val) {
-        return (
-            <div className="card shadow mb-4 prod-type-div">
+        const rtn = [];
+
+        let reco = [];
+
+        reco.push(...val.recoCPU.map(val => this.state.availCPU[val]));
+        reco.push(...val.recoGPU.map(val => this.state.availGPU[val]));
+
+        reco.forEach(prod => {
+            rtn.push(
+                <div className="card shadow availProd">
                 <span style={{fontSize: 20, fontWeight: "bold", width: "100%", display: "flex"}}>
-                    <p className="prod-type-p">Balls</p>
-                    <Button onClick={this.changeToProducts}><AddShoppingCartIcon /></Button>
+                    <img className="reco-icon" src={prod.image} alt="Product Thumbnail" />
+                    <a href={prod.link} className="reco-prod">{prod.item_name}</a>
+                    <Button onClick={() => this.addReco(prod)}><AddShoppingCartIcon /></Button>
                 </span>
-            </div>
-        )
+                </div>
+            )
+        });
+
+        return rtn;
+    }
+
+    addReco(selected) {
+        this.state.catalog[selected["type"]].push(selected);
+        this.setState({
+            total: this.state.total + parseFloat(selected["price"].replace(",", ""))
+        })
     }
 
     queryResults() {
@@ -432,9 +498,11 @@ export default class BuildAPC extends Component {
                         </div>
                         <div className="details">
                             <p className="prod-type-p reqTitle" style={{fontSize: 22, fontWeight: "bold"}}>{val.title}</p>
-                            {this.recParts(val)}}
+                            {this.recParts(val)}
                         </div>
-                        {/*{this.availProd(val)*/}
+                        <div className="availDiv">
+                            {this.availProd(val)}
+                        </div>
                     </div>
                 )
             })
@@ -449,11 +517,32 @@ export default class BuildAPC extends Component {
         })
     }
 
+    async preload() {
+        if (this.state.availCPU === null) {
+            await axios.get(this.baseURL + "/products/" + "cpu")
+                .then(res => {
+                    this.setState({ availCPU: res.data })
+                }).catch((e) => console.log(e));
+
+            await axios.get(this.baseURL + "/products/" + "gpu")
+                .then(res => {
+                    this.setState({ availGPU: res.data })
+                }).catch((e) => console.log(e));
+
+            await this.setState({
+                cpuArr: this.state.availCPU.map(val => val.item_name.slice(0, 50)),
+                gpuArr: this.state.availGPU.map(val => val.item_name.slice(0, 50))
+            })
+        }
+    }
+
     async appQuery() {
         if (this.state.query !== undefined && this.state.query.length >= 3) {
             this.setState({
                 loading: true
             })
+
+            await this.preload();
 
             await axios.get(this.baseURL + "/requirements/search/" + this.state.query)
                 .then(res => {
@@ -466,10 +555,19 @@ export default class BuildAPC extends Component {
             toThis.scrollIntoView({ behavior: "smooth" });
 
             // Get Actual Parts
-            this.state.gameDebateQuery.forEach(val => {
+            await this.state.gameDebateQuery.forEach(val => {
                 axios.post(this.baseURL + "/requirements/link", {
                     link: val.link
                 }).then(res => {
+                    res.data.cpu.forEach(part => {
+                        const best = stringSimilarity.findBestMatch(part, this.state.cpuArr);
+                        if (best.bestMatch.rating >= 0.2) val.recoCPU.push(best.bestMatchIndex);
+                    });
+                    res.data.gpu.forEach(part => {
+                        const best = stringSimilarity.findBestMatch(part, this.state.gpuArr);
+                        if (best.bestMatch.rating >= 0.2) val.recoGPU.push(best.bestMatchIndex);
+                    });
+
                     val.cpu.push(...res.data.cpu);
                     val.gpu.push(...res.data.gpu);
                 }).then(() => {

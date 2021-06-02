@@ -20,7 +20,9 @@ const search = async (req, res) => {
             "link": link,
             "image": image,
             "cpu": [],
-            "gpu": []
+            "gpu": [],
+            "recoCPU": [],
+            "recoGPU": []
         })
     })
 

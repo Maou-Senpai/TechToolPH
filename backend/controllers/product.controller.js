@@ -40,10 +40,11 @@ async function scrapeDynaQuest() {
                 const price = $(el).find('.price').text().replace("₱", "");
                 const image = $(el).find('img')[0].attribs.src;
                 const link = baseURL + $(el).find('.title-5')[0].attribs.href;
-
                 const type = value[0];
+                const source = "DynaQuestPC";
+
                 const newProduct = new Product({
-                    item_name, price, image, type, link
+                    item_name, price, image, type, link, source
                 });
 
                 newProduct.save()

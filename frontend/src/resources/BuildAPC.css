@@ -22,12 +22,19 @@ h3 {
 }
 
 .selected-a {
-    font-size: 20px;
-    width: 100%;
+    font-size: 16px;
+    padding-left: 20px;
+    width: 60%;
     align-self: center;
     text-align: left;
     display: flex;
     float: left;
+}
+
+.selected-price {
+    width: 30%;
+    margin: 0;
+    align-self: center;
 }
 
 .selected-b {
@@ -41,9 +48,17 @@ h3 {
 }
 
 .prod-a {
+    padding-left: 30px;
+    font-size: 20px;
     width: 80%;
     float: left;
     margin-bottom: 0;
+}
+
+.prod-span {
+    width: 20%;
+    text-align: right;
+    font-size: 20px;
 }
 
 .content {
@@ -77,4 +92,84 @@ h3 {
     justify-content: center;
     border-right-style: solid;
     padding-right: 20px;
+    margin-right: 20px;
+}
+
+.availProd {
+    width: 100%;
+    height: min-content;
+    padding-left: 20px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.availDiv {
+    min-height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.prod-type-p {
+    font-size: 20px;
+}
+
+.reco-icon {
+    height: 30px;
+    align-self: center;
+    margin-right: 15px;
+}
+
+.selected-icon {
+    width: 10%;
+    height: min-content;
+    align-self: center;
+}
+
+.selected-div {
+    margin: auto;
+    width: 70%;
+    text-align: center;
+    padding: 30px;
+    flex-direction: row !important;
+}
+
+.reco-prod {
+    font-size: 16px;
+    align-self: center;
+    width: 100%;
+}
+
+.filter-input {
+    min-height: 50px;
+    align-self: center;
+}
+
+.filter-div {
+    margin-left: 20px;
+    min-width: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.selection-top {
+    display: flex;
+    width: 100%;
+}
+
+.compare-div {
+    min-height: 100% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.sort {
+    margin-top: 10px !important;
+    border-style: solid !important;
+    border-width: medium !important;
 }

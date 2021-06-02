@@ -30,6 +30,7 @@
     "react-table-scrollbar": "^0.1.11",
     "semantic-ui-css": "^2.2.14",
     "semantic-ui-react": "^2.0.3",
+    "string-similarity": "^4.0.4",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
