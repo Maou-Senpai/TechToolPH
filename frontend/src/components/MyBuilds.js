@@ -13,9 +13,9 @@ const Build = props => {
             <td>{props.build.build_name}</td>
             <td>{props.build.updatedAt}</td>
             <td className="text-center">
-                <Link to={'/my-builds/'+props.build._id} className="btn btn-sm btn-danger">View</Link>
-                <Link to={'/build-pc/'+props.build._id} className="btn btn-sm btn-info">Edit</Link>
-                <a href="#" onClick={()=>{props.deletebuild(props.build._id)}} className="btn btn-sm btn-primary">Delete</a>
+                <Link to={'/my-builds/'+props.build._id} className="btn btn-sm btn-danger" style={{marginRight: "0.2rem"}}>View</Link>
+                <Link to={'/build-pc/'+props.build._id} className="btn btn-sm btn-info" style={{marginRight: "0.2rem"}}>Edit</Link>
+                <a href="#" onClick={()=>{props.deletebuild(props.build._id)}} className="btn btn-sm btn-primary" style={{marginRight: "0.2rem"}}>Delete</a>
             </td>
         </tr>
     )
@@ -51,8 +51,9 @@ export default class MyBuild extends Component {
     }
 
     deletebuild(id){
+
         axios.delete(this.baseURL + '/build/delete/'+id)
-            .then(res=>console.log(res.data))
+            .then(res=>alert(res.data))
             this.setState({
                 build: this.state.build.filter(el=>el._id !== id)
             })

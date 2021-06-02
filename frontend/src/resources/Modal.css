@@ -7,6 +7,7 @@
     left: auto !important;
     bottom: auto !important;
     right: auto !important;
+
 }
 
 .dimmed.dimmable > .ui.animating.dimmer, .dimmed.dimmable > .ui.visible.dimmer, .ui.active.dimmer {
