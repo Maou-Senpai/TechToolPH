@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import ClearIcon from '@material-ui/icons/Clear';
+import React, {Component} from 'react';
 import axios from 'axios';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import {Button, Modal} from "semantic-ui-react";
+import SearchIcon from "@material-ui/icons/Search";
 
 // noinspection DuplicatedCode
 export default class News extends Component {
@@ -16,25 +16,23 @@ export default class News extends Component {
             selected: null
         }
         this.filter = this.filter.bind(this);
-        this.clear = this.clear.bind(this);
+        this.actualFilter = this.actualFilter.bind(this);
         this.back = this.back.bind(this);
         this.next = this.next.bind(this);
+        this.filterKey = this.filterKey.bind(this);
     }
 
     componentDidMount() {
         let baseUrl = process.env.REACT_APP_API || "http://localhost:5000";
         axios.get(baseUrl + "/news/")
             .then(res => {
-                this.setState({ news : res.data })
-                this.setState({ loaded : true });
+                this.setState({
+                    news: res.data,
+                    allNews: res.data,
+                    loaded: true
+                });
             })
-            .catch((e) => console.log(e));
-    }
-
-    clear() {
-        this.setState({
-            searchTerm: ""
-        })
+            .catch(e => console.log(e));
     }
 
     filter(event) {
@@ -59,14 +57,6 @@ export default class News extends Component {
                 page: this.state.page + 1
             });
         }
-    }
-
-    actualFilter() {
-        return this.state.news.filter((val) =>{
-            return ((this.state.searchTerm === "") ||
-                (val.title.toLowerCase().includes(this.state.searchTerm.toLowerCase())) ||
-                (val.source.toLowerCase().includes(this.state.searchTerm.toLowerCase())));
-        }).slice(this.state.page * 10, (this.state.page + 1) * 20);
     }
 
     redirect(e) {
@@ -97,6 +87,29 @@ export default class News extends Component {
         )
     }
 
+    actualFilter() {
+        const newNews = this.state.allNews.filter((val) => {
+            return ((this.state.searchTerm === "") ||
+                (val.title.toLowerCase().includes(this.state.searchTerm.toLowerCase())) ||
+                (val.source.toLowerCase().includes(this.state.searchTerm.toLowerCase())));
+        });
+
+        this.setState({
+            news: newNews,
+            page: 0
+        })
+    }
+
+    pageDivider() {
+        return this.state.news.slice(this.state.page * 10, (this.state.page + 1) * 10);
+    }
+
+    filterKey(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            this.actualFilter();
+        }
+    }
 
     render() {
         return (
@@ -107,11 +120,11 @@ export default class News extends Component {
                 <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div className="input-group">
-                            <input className="form-control bg-light border-0 small" type="text"
+                            <input className="form-control bg-light border-0 small" type="text" onKeyPress={this.filterKey}
                                    placeholder="Search Keyword" value={this.state.searchTerm} onChange={this.filter}/>
-                            <div className="input-group-append" onClick={this.clear}>
+                            <div className="input-group-append" onClick={this.actualFilter}>
                                 <button className="btn btn-primary" type="button">
-                                    <ClearIcon />
+                                    <SearchIcon />
                                 </button>
                             </div>
                         </div>
@@ -128,33 +141,36 @@ export default class News extends Component {
                 <div className="container-fluid">
                     {/*Left*/}
                     <div style={{width: "49%", float: "left"}}>
-                        {this.state.loaded ? this.actualFilter().map((val, idx) => {
-                            if (idx % 2 === 0) return <a href="javascript:void(0)" onClick={() => this.redirect(val)}>
-                                <div className="card shadow mb-4" style={{alignItems: "center", textAlign: "center", padding: 30}}>
-                                    <img key={val.thumbnail.uniqueID} src={val.thumbnail}
-                                         style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
-                                    <span key={val.title.uniqueID} style={{fontSize: 20, fontWeight: "bold"}}>
-                                        {val.source} --- {val.title}
-                                    </span>
-                                </div>
-                            </a>
-                            else return null;
+                        {this.state.loaded ? this.pageDivider().map((val, idx) => {
+                            if (idx % 2 === 0) return (
+                                <a href="javascript:void(0)" onClick={() => this.redirect(val)}>
+                                    <div className="card shadow mb-4" style={{alignItems: "center",
+                                        textAlign: "center", padding: 30}}>
+                                        <img key={val.thumbnail.uniqueID} src={val.thumbnail}
+                                             style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
+                                        <span key={val.title.uniqueID} style={{fontSize: 20, fontWeight: "bold"}}>
+                                            {val.source} --- {val.title}
+                                        </span>
+                                    </div>
+                                </a>
+                            ); else return null;
                         }) : null}
                     </div>
 
                     {/*Right*/}
                     <div style={{width: "49%", float: "right"}}>
-                        {this.state.loaded ? this.actualFilter().map((val, idx) => {
-                            if (idx % 2 !== 0) return <a href="javascript:void(0)" onClick={() => this.redirect(val)}>
-                                <div className="card shadow mb-4" style={{alignItems: "center", textAlign: "center", padding: 30}}>
-                                    <img key={val.thumbnail.uniqueID} src={val.thumbnail}
-                                         style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
-                                    <span key={val.title.uniqueID} style={{fontSize: 20, fontWeight: "bold"}}>
-                                        {val.source} --- {val.title}
-                                    </span>
-                                </div>
-                            </a>
-                            else return null;
+                        {this.state.loaded ? this.pageDivider().map((val, idx) => {
+                            if (idx % 2 !== 0) return (
+                                <a href="javascript:void(0)" onClick={() => this.redirect(val)}>
+                                    <div className="card shadow mb-4" style={{alignItems: "center", textAlign: "center", padding: 30}}>
+                                        <img key={val.thumbnail.uniqueID} src={val.thumbnail}
+                                             style={{maxWidth: "100%", paddingBottom: 20}} alt="thumbnail" />
+                                        <span key={val.title.uniqueID} style={{fontSize: 20, fontWeight: "bold"}}>
+                                            {val.source} --- {val.title}
+                                        </span>
+                                    </div>
+                                </a>
+                            ); else return null;
                         }) : null}
                     </div>
                 </div>

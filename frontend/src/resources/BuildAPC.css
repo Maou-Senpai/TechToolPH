@@ -43,3 +43,18 @@ h3 {
 .compare {
     float: right;
 }
+
+.req {
+    margin-top: 50px;
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.reqCover {
+    max-width: 100px;
+    margin-right: 20px;
+}
+
+.reqTitle {
+    font-size: 20px;
+}

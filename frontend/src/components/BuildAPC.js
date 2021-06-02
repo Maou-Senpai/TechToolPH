@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import SaveIcon from '@material-ui/icons/Save';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {Button, TextField} from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import axios from "axios";
 import checkLoggedIn from "./auth/UserAuth";
 import '../resources/BuildAPC.css';
 
-import {Autocomplete} from "@material-ui/lab";
+import { Autocomplete } from "@material-ui/lab";
 import SearchIcon from '@material-ui/icons/Search';
+import { LoopCircleLoading } from 'react-loadingg';
 
 const initialState = {
     build: "",
@@ -71,6 +72,7 @@ export default class BuildAPC extends Component {
         this.getBenchTwo = this.getBenchTwo.bind(this);
         this.filter = this.filter.bind(this);
         this.onAppQuery = this.onAppQuery.bind(this);
+        this.onReqKey = this.onReqKey.bind(this);
 
         axios.get(this.baseURL + "/benchmarks/gpu").then(res => {
             for (let bench of res.data) {
@@ -378,7 +380,7 @@ export default class BuildAPC extends Component {
         return (
             <div style={{marginBottom: 50}}>
                 <hr style={{height: 20, margin: 50}} />
-                <h2 style={{textAlign: "center", marginBottom: 50}}>
+                <h2 style={{textAlign: "center", marginBottom: 50}} ref={el => this.gamesCard = el}>
                     Recommended Requirement Checking (Game Debate)
                 </h2>
                 <div style={{display: "flex", justifyContent: "center"}}>
@@ -390,21 +392,21 @@ export default class BuildAPC extends Component {
     }
 
     queryResults() {
-        if (this.state.gameDebateQuery === undefined) return;
+        if (this.state.gameDebateQuery !== undefined) {
+            let results = [];
+            this.state.gameDebateQuery.slice(0, 5).forEach(val => {
+                results.push(
+                    <div className="card shadow mb-4 prod-type-div req">
+                        <img src={val.image}  alt="Game Cover" className="reqCover" />
+                        <p className="prod-type-p reqTitle">{val.title}</p>
+                        {val.cpu.map(val => <p className="prod-type-p reqTitle">{val}</p>)}
+                        {val.gpu.map(val => <p className="prod-type-p reqTitle">{val}</p>)}
+                    </div>
+                )
+            })
 
-        let results = [];
-        this.state.gameDebateQuery.forEach(val => {
-            results.push(
-                <div className="card shadow mb-4 prod-type-div" style={{marginTop: 50}}>
-                    <span style={{fontSize: 20, fontWeight: "bold", width: "100%", display: "flex"}}>
-                        <p className="prod-type-p">Hello</p>
-                        <Button onClick={this.changeToProducts}><AddShoppingCartIcon /></Button>
-                    </span>
-                </div>
-            )
-        })
-
-        return results;
+            return results;
+        }
     }
 
     onAppQuery(event) {
@@ -414,23 +416,48 @@ export default class BuildAPC extends Component {
     }
 
     async appQuery() {
-        if (this.state.query !== "" && this.state.query !== undefined) {
-            axios.get(this.baseURL + "/requirements/search/" + this.state.query)
-                .then(res => console.log(res.data));
+        if (this.state.query !== undefined && this.state.query.length >= 3) {
+            this.setState({
+                loading: true
+            })
+
+            console.log(this.state.query);
+
+            await axios.get(this.baseURL + "/requirements/search/" + this.state.query)
+                .then(res => {
+                    console.log(res.data);
+                    this.setState({
+                        gameDebateQuery: res.data
+                    })
+                });
+
+            await this.setState({
+                loading: false
+            });
+
+            const toThis = this.gamesCard;
+            toThis.scrollIntoView({ behavior: "smooth" });
         }
     }
 
     appInput() {
         return(
             <div className="input-group" style={{justifyContent: "center", width: "100%"}}>
-                <input className="form-control bg-light border-0 small" onChange={this.onAppQuery}
-                       style={{height: 60, maxWidth: "50%"}} type="text" placeholder="Enter Game"/>
+                <input className="form-control bg-light border-0 small" onChange={this.onAppQuery} onKeyPress={this.onReqKey}
+                       style={{height: 60, maxWidth: "50%"}} type="text" placeholder="Enter Game (3 or More Characters)"/>
                 <div className="input-group-append">
-                    <Button type="button" style={{height: 60}} onClick={() => this.appQuery()}>
+                    <Button type="button" style={{height: 60, marginLeft: 10 ,marginRight: 20}} onClick={() => this.appQuery()}>
                         <SearchIcon />
                     </Button>
+                    <div>
+                        {this.state.loading ? <LoopCircleLoading style={{inset: "unset"}} /> : null}
+                    </div>
                 </div>
             </div>
         )
+    }
+
+    onReqKey(e) {
+        if (e.key === "Enter") this.appQuery().then();
     }
 }

@@ -51,7 +51,7 @@ function App() {
             }
         };
 
-        checkLoggedIn();
+        checkLoggedIn().then(() => console.log("Done"));
     }, []);
 
     return (
