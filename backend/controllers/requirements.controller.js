@@ -1,23 +1,29 @@
-import puppeteer from 'puppeteer';
+import fetch from 'node-fetch';
+import htmlParser from 'node-html-parser';
+const {parse} = htmlParser;
 
 const search = async (req, res) => {
-    // const search = "grand  theft";
-    const search = req.params.id;
-    const query = search.split(/\s+/).join("+");
+    const query = req.params.id.split(/\s+/).join("+");
+    const baseURL = "https://game-debate.com";
+    const html = await fetch(baseURL + "/search/games?search=" + query)
+        .then(res => res.text());
+    const doc = parse(html);
 
-    const baseURL = "https://game-debate.com/search/games?search=";
-    const browser = await puppeteer.launch({headless: false});
-    const page = await browser.newPage();
-    await page.goto(baseURL + query);
-
-    let results = await page.$$eval("div.gameSearchResultWrapper.searchResultWrapper", val => {
-
+    const rtn = [];
+    doc.querySelectorAll('div.gameSearchResultWrapper.searchResultWrapper').forEach(val => {
+        if (val.querySelector('img.compatiblePlatformIcon[title*=PC]') === null) return;
+        const title = val.querySelector("a.gameResultHeader").textContent;
+        const link = baseURL + val.querySelector("a.gameResultHeader").getAttribute("href");
+        const image = baseURL + val.querySelector("img").getAttribute("src");
+        rtn.push({
+            "title": title,
+            "link": link,
+            "image": image
+        })
     });
 
-    // await browser.close();
-
-    console.log(req.params.id);
-    return res.json("Done");
+    if (rtn.length > 0) return res.json(rtn);
+    else res.json("Error");
 };
 
 export default {

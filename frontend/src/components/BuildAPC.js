@@ -58,6 +58,7 @@ export default class BuildAPC extends Component {
         this.setState({
             cpuOptions: [],
             gpuOptions: [],
+            query: "",
             gameDebateQuery: []
         })
 
@@ -412,10 +413,11 @@ export default class BuildAPC extends Component {
         })
     }
 
-    appQuery() {
-        axios.get(this.baseURL + "/requirements/search/" + this.state.query)
-            .then(() => console.log("Working"))
-            .then((e) => console.log(e));
+    async appQuery() {
+        if (this.state.query !== "" && this.state.query !== undefined) {
+            axios.get(this.baseURL + "/requirements/search/" + this.state.query)
+                .then(res => console.log(res.data));
+        }
     }
 
     appInput() {
