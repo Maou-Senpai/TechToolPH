@@ -7,11 +7,6 @@ import User from '../models/user.model.js';
 
 import user from '../controllers/user.controller.js';
 
-//auth
-router.post('/signup',user.signup);
-router.post('/login',user.login);
-router.post('/tokenIsValid',user.tokenIsValid);
-
 //get user with token
 router.get("/", auth, async (req, res) => {
     const user = await User.findById(req.user);
@@ -21,6 +16,12 @@ router.get("/", auth, async (req, res) => {
     });
 });
 
+//auth
+router.post('/signup',user.signup);
+router.post('/login',user.login);
+router.post('/tokenIsValid',user.tokenIsValid);
+
+router.post('/update/:id', user.update);
 router.get('/users', user.getUsers);
 router.get('/:id',user.getUser);
 router.get('/builds/:id',user.getUserBuilds);
