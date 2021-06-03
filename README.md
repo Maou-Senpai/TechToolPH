@@ -1,7 +1,7 @@
 # TechToolPH
 TechToolPH is an aggregator website that helps people plan their own PC. The list of products to choose from will be based on what is available from famous PC stores in the Philippines such as Villman, DynaQuest, EasyPC, etc.
 <br> <br>
-Try visiting the web app here: https://tech-tool-ph.vercel.app/build-pc. Site may initially load slow at first or send a timeout error since Heroku server might be in sleep mode due to limitations of free trial. Server starting up usually takes a minute or two.
+Try visiting the web app here: https://tech-tool-ph.vercel.app. Site may initially load slow at first or send a timeout error since Heroku server might be in sleep mode due to limitations of free trial. Server starting up usually takes a minute or two.
 
 # Requirements and Dependencies
 The website made use of the MERN stack. Shown below are the modules, library, framework, etc. used:
@@ -22,6 +22,7 @@ The website made use of the MERN stack. Shown below are the modules, library, fr
 5. Run "npm install" to install all needed modules
 6. Open a terminal on the folder "frontend"
 7. Run "npm install" to install all needed modules
+8. Run "npm start" on "backend" and "frontend" folders.
 
 # Revision Logs
 Version | Primary Author(s) | Description of Version | Date Completed
