@@ -22,6 +22,7 @@ The website made use of the MERN stack. Shown below are the modules, library, fr
 5. Run "npm install" to install all needed modules
 6. Open a terminal on the folder "frontend"
 7. Run "npm install" to install all needed modules
+8. Run "npm start" on "backend" and "frontend" folders.
 
 # Revision Logs
 Version | Primary Author(s) | Description of Version | Date Completed
