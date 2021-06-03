@@ -8,6 +8,8 @@ import product from '../controllers/product.controller.js';
 //const product = require('../controllers/product.controller');
 
 router.get('/scrape', product.addProduct);
+router.get('/scrapeDyna', product.scrapeDynaQuest);
+router.get('/scrapeVillman', product.scrapeVillman);
 router.get('/:productType', product.getProducts);
 
 //module.exports = router;

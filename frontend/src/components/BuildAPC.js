@@ -337,8 +337,7 @@ export default class BuildAPC extends Component {
         )
     }
 
-    sortAndFilter(option) {
-        console.log(this.state.loadedProducts);
+    sort(option) {
         let sorted;
 
         if (option !== undefined) {
@@ -352,19 +351,15 @@ export default class BuildAPC extends Component {
                 });
             }
 
-            console.log(sorted);
-            const newLoaded = {};
-            sorted.forEach((val, idx) => {
-                newLoaded[idx] = val[1];
+            const newLoaded = [];
+            sorted.forEach((val) => {
+                newLoaded.push(val[1]);
             })
-            console.log(newLoaded);
-        }
 
-        return Object.entries(this.state.loadedProducts).filter((val) => {
-            return ((this.state.searchTerm === "") ||
-                (val[1]["item_name"].toLowerCase().includes(this.state.searchTerm.toLowerCase())) ||
-                (val[1]["source"].toLowerCase().includes(this.state.searchTerm.toLowerCase())))
-        })
+            this.setState({
+                loadedProducts: newLoaded
+            })
+        }
     }
 
     prodFilter() {
@@ -372,8 +367,8 @@ export default class BuildAPC extends Component {
             <div className="filter-div">
                 <input className="form-control bg-light border-0 small filter-input"
                        type="text" placeholder="Enter Keyword" onChange={this.filter}/>
-                <Button className="sort" onClick={() => this.sortAndFilter(0)}>Price Ascending</Button>
-                <Button className="sort" onClick={() => this.sortAndFilter(1)}>Price Descending</Button>
+                <Button className="sort" onClick={() => this.sort(0)}>Price Ascending</Button>
+                <Button className="sort" onClick={() => this.sort(1)}>Price Descending</Button>
             </div>
         )
     }
@@ -396,18 +391,29 @@ export default class BuildAPC extends Component {
         )
     }
 
+    actualFilter() {
+        return Object.entries(this.state.loadedProducts).filter((val) => {
+            return ((this.state.searchTerm === "") ||
+                (val[1]["item_name"].toLowerCase().includes(this.state.searchTerm.toLowerCase())) ||
+                (val[1]["source"].toLowerCase().includes(this.state.searchTerm.toLowerCase())))
+        })
+    }
+
     buildSelectContent() {
         return (
             // Content
             <div className="container-fluid" style={{width: "100%"}}>
-                {this.sortAndFilter().map((val) => {
+                {this.actualFilter().map((val) => {
                     return (
                         <div className="card shadow mb-4" style={{margin: "auto", width: "90%", padding: 30}}>
                             <span style={{height: "min-content", display: "flex", alignItems: "center"}}>
                                 <img src={val[1].image} alt="Product Image" className="selected-icon" />
-                                <a className="prod-a" target="_blank" href={val[1]["link"]}
-                                   rel="noreferrer">{val[1]["item_name"]}</a>
-                                <span className="prod-span">{val[1]["price"]}</span>
+                                <div className="selected-details">
+                                    <a className="prod-a" target="_blank" href={val[1]["link"]}
+                                       rel="noreferrer">{val[1]["item_name"]}</a>
+                                    <p className="selected-source">{val[1].source}</p>
+                                </div>
+                                <span className="prod-span">{parseFloat(val[1]["price"].replace(",", ""))}</span>
                                 <Button value={JSON.stringify(val[1])} onClick={this.changeToHome}
                                         style={{float: "right", width: 10}}><AddShoppingCartIcon /></Button>
                             </span>
