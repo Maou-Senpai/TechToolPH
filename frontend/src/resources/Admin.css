@@ -1,0 +1,33 @@
+.Admin {
+    margin-left: 14rem;
+    margin-top: 30px;
+    width: 100%;
+}
+
+.admin-settings {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-label {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.admin-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.News, .Product, .Benchmarks {
+    width: 300px;
+    height: 100px;
+    margin-left: 20px !important;
+    margin-right: 20px !important;
+}
+
+.users-table-div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

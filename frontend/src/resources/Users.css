@@ -2,3 +2,18 @@
     display: flex;
     justify-content: center;
 }
+
+.users {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.users-div {
+    margin-top: 50px;
+    margin-bottom: 30px;
+    width: 70%;
+}
+
+.users-table {
+    width: 70% !important;
+}

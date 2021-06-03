@@ -65,11 +65,11 @@ export default class MyBuild extends Component {
 
     render() {
         return (
-            <div className='MyBuilds text-center' style={{marginTop: 50, marginBottom: 30, width:"70%"}}>
-                <h1>USERS</h1>
+            <div className='MyBuilds text-center users-div'>
+                <h1 className="users">USERS</h1>
                     <TableScrollbar rows={10}>
-                        <table className="table table-bordered table-hover" style={{width: "100%"}} >
-                            <thead className="thead-dark" >
+                        <table className="table table-bordered table-hover users-table">
+                            <thead className="thead-dark">
                             <tr>
                                 <th>Username</th>
                                 <th>Date Created</th>

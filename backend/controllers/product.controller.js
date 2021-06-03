@@ -1,5 +1,6 @@
 // let Product = require('../models/product.model');
 
+import puppeteer from 'puppeteer';
 import Product from '../models/product.model.js';
 import fetch from 'node-fetch';
 import * as cheerio from 'cheerio';
@@ -117,16 +118,67 @@ async function villman($, baseURL, value) {
     });
 }
 
-const addProduct = async (req, res) => {
-    Product.deleteMany({})
-        .then(() => console.log("Collection Cleared"))
-        .catch(() => console.log("Collection Failed to Clear"));
+async function scrapeEasyPC(req, res) {
+    let pages = {
+        cpu: ['https://easypc.com.ph/collections/processor-amd', 'https://easypc.com.ph/collections/processor-intel'],
+        gpu: ['https://easypc.com.ph/collections/graphic-card'],
+        motherboard: ['https://easypc.com.ph/collections/motherboard'],
+        ram: ['https://easypc.com.ph/collections/memory'],
+        storage: ['https://easypc.com.ph/collections/hard-disk', 'https://easypc.com.ph/collections/solid-state-drive'],
+        psu: ['https://easypc.com.ph/collections/power-supply'],
+        case: ['https://easypc.com.ph/collections/pc-case']
+    }
+    let browser, page;
+    const inStock = "?_=pf&pf_st_stock_status=true";
+    const pageQuery = "&page="
+    browser = await puppeteer.launch({headless: false});
 
-    Promise.all([scrapeDynaQuest(), scrapeVillman()])
-        .then(() => res.json("Done"))
-        .catch(() => res.json("Error"));
+    for (let part in pages) {
+        for (let pageHTML of pages[part]) {
+            page = await browser.newPage();
+            await page.goto(pageHTML + inStock);
 
-    return res;
+            let pageN = await page.$eval('#bc-sf-filter-bottom-pagination', val => {
+                const pageButtons = val.querySelectorAll('li');
+                if (pageButtons.length === 0) return 1;
+                return pageButtons[pageButtons.length - 2].textContent;
+            });
+
+            for (let i = 1; i <= pageN; i++) {
+                console.log(pageHTML + inStock + pageQuery + i);
+                if (i > 1) await page.goto(pageHTML + inStock + pageQuery + i);
+                await easyPC(page, part);
+            }
+        }
+    }
+
+    await browser.close();
+
+    if (res != null) res.json("Done");
+}
+
+async function easyPC(page, type) {
+    const products = await page.$$eval('.bc-sf-filter-product-item-inner', (val, type) => {
+        const baseURL = 'https://easypc.com.ph';
+        const rtn = [];
+        val.forEach(part => {
+            let item_name = part.querySelector('.bc-sf-filter-product-item-title').textContent.toUpperCase();
+            let price = part.querySelector('.hidePrice').textContent.replaceAll("₱", "");
+            let image = part.querySelector('img').srcset;
+            image = image.slice(image.lastIndexOf("http"));
+            image = image.slice(0, image.lastIndexOf(" "));
+            let url = baseURL + part.querySelector('.bc-sf-filter-product-item-title').getAttribute("href");
+            let source = "EasyPC";
+            rtn.push([item_name, price, image, type, url, source]);
+        })
+        return rtn;
+    }, type);
+
+    // noinspection JSUnresolvedVariable
+    for (let i = 0; i < products.length; i++) {
+        const val = products[i];
+        await scrapedData(val[0], val[1], val[2], val[3], val[4], val[5]);
+    }
 }
 
 async function scrapedData(item_name, price, image, type, link, source) {
@@ -139,9 +191,22 @@ async function scrapedData(item_name, price, image, type, link, source) {
         .catch((e) => console.log(e));
 }
 
+const addProduct = async (req, res) => {
+    Product.deleteMany({})
+        .then(() => console.log("Collection Cleared"))
+        .catch(() => console.log("Collection Failed to Clear"));
+
+    Promise.all([scrapeDynaQuest(), scrapeVillman(), scrapeEasyPC()])
+        .then(() => res.json("Done"))
+        .catch(() => res.json("Error"));
+
+    return res;
+}
+
 export default {
     getProducts,
     scrapeDynaQuest,
     scrapeVillman,
+    scrapeEasyPC,
     addProduct
 }

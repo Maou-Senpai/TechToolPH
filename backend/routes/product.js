@@ -10,6 +10,7 @@ import product from '../controllers/product.controller.js';
 router.get('/scrape', product.addProduct);
 router.get('/scrapeDyna', product.scrapeDynaQuest);
 router.get('/scrapeVillman', product.scrapeVillman);
+router.get('/scrapeEasyPC', product.scrapeEasyPC);
 router.get('/:productType', product.getProducts);
 
 //module.exports = router;

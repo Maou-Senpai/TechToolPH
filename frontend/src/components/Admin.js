@@ -5,6 +5,8 @@ import {Button, Modal} from "semantic-ui-react";
 import {Link} from "react-router-dom";
 import {LoopCircleLoading} from "react-loadingg";
 
+import '../resources/Admin.css';
+
 export default class Admin extends Component {
     constructor(p){
         super(p);
@@ -81,11 +83,10 @@ export default class Admin extends Component {
                 </Modal.Actions>
             </Modal>
         )
-
     }
 
-    render(){
-        if(this.state.response=="" && this.state.click==1){
+    render() {
+        if (this.state.response === "" && this.state.click === 1) {
             return(
             <Modal open dimmer="blurring" className='modal' size="mini" >
 
@@ -99,19 +100,25 @@ export default class Admin extends Component {
         }
 
         return (
-            <div className='Admin' style={{marginLeft: "20rem", marginTop:"2rem", width:"100%"}}>
+            <div className='Admin'>
                 {this.state.response!==""?(this.responseModal()):(<></>)}
-                <h1> ADMIN SETTINGS</h1>
-                <Button className="News" type="button" onClick={this.scrapeNews}>
-                    News
-                </Button>
-                <Button className="Product" type="button" onClick={this.scrapeProduct}>
-                    Product
-                </Button>
-                <Button className="Benchmarks" type="button" onClick={this.scrapeBenchmark}>
-                    Benchmarks
-                </Button>
-                <Users style={{marginTop: "5rem"}}/>
+                <div className="admin-settings">
+                    <h1 className="admin-label">ADMIN SETTINGS</h1>
+                    <div className="admin-buttons">
+                        <Button className="News" type="button" onClick={this.scrapeNews}>
+                            News
+                        </Button>
+                        <Button className="Product" type="button" onClick={this.scrapeProduct}>
+                            Product
+                        </Button>
+                        <Button className="Benchmarks" type="button" onClick={this.scrapeBenchmark}>
+                            Benchmarks
+                        </Button>
+                    </div>
+                </div>
+                <div className="users-table-div">
+                    <Users />
+                </div>
             </div>
         )
     }
