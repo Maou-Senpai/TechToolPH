@@ -40,15 +40,33 @@ const update = async(req,res)=>{
 
     let { username, password, passwordCheck } = req.body;
 
+    const user = await User.findById((req.params.id));
+
+
+    if(password=="" ){
+        password = null
+    }
+    if(passwordCheck=="" ){
+        passwordCheck = null
+    }
+
+    if(username=="" || username== null){
+        username = user.username
+    }
+
+    console.log(username+password+passwordCheck)
+
+
     let pass = false;
-    if(!password && !passwordCheck){
+    if(!password  && !passwordCheck){
+        console.log("heeeeee")
         pass = true;
     }
 
     console.log(!pass)
-
     if (!pass) {
         if(!password || !passwordCheck) {
+
             console.log("fail3")
             return res.status(400).json({msg: "Not all fields have been entered."});
         }
@@ -69,17 +87,20 @@ const update = async(req,res)=>{
         }
     }
 
+    console.log(username+"he")
     username = username.trim();
     console.log(username)
 
     const existing = await User.findOne({username: username});
     if(existing){
-        console.log(existing)
-        return res
-            .status(500)
-            .json({msg: "Account already exists."})
+        if(req.params.id!=existing._id) {
+            console.log(existing)
+            return res
+                .status(500)
+                .json({msg: "Username already exists."})
+        }
     }
-
+    console.log("hello")
     User.findById((req.params.id))
         .then(user => {
 
@@ -87,6 +108,8 @@ const update = async(req,res)=>{
             if(pass !== true){
                 user.password = user.generateHash(password)
             }
+
+
 
             user.save()
                 .then(() => res.json('Record was updated!'))
