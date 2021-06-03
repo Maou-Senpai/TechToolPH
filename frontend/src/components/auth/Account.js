@@ -16,21 +16,10 @@ export default function Account(props) {
 
     const baseURL = process.env.REACT_APP_API || "http://localhost:5000";
 
-    const submit = async (e) => {
+    const submit =async (e) => {
         e.preventDefault();
 
         try {
-
-            if(username == null){
-                setUsername(userData.user.username);
-                console.log(username)
-            }
-
-            if(password==null && passwordCheck==null){
-                setPassword(userData.user.password);
-                setPasswordCheck(userData.user.password)
-            }
-
             const newUser = { username, password, passwordCheck };
             console.log(newUser)
 
