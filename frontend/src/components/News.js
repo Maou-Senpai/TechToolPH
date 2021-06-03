@@ -5,6 +5,8 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import {Button, Modal} from "semantic-ui-react";
 import SearchIcon from "@material-ui/icons/Search";
 
+import '../resources/News.css';
+
 // noinspection DuplicatedCode
 export default class News extends Component {
     constructor(p) {
@@ -112,6 +114,16 @@ export default class News extends Component {
     }
 
     render() {
+        if (this.state.news === undefined) return (
+            <div className="advisory-div">
+                <p className="advisory">
+                    If you can see this, the backend server may be on sleep due to free trial limitations. It sleeps
+                    upon 20 minutes of inactivity. Since you visited this website, this will trigger the server to start.
+                    Please wait for a few seconds to a minute before refreshing the page.
+                </p>
+            </div>
+        )
+
         return (
             <div className="content" style={{width: "100%"}}>
                 {this.popUp()}
