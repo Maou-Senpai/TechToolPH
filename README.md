@@ -1,7 +1,9 @@
 # TechToolPH
 TechToolPH is an aggregator website that helps people plan their own PC. The list of products to choose from will be based on what is available from famous PC stores in the Philippines such as Villman, DynaQuest, EasyPC, etc.
 <br> <br>
-Try visiting the web app here: https://tech-tool-ph.vercel.app. Site may initially load slow at first or send a timeout error since Heroku server might be in sleep mode due to limitations of free trial. Server starting up usually takes a minute or two.
+<img src="https://raw.githubusercontent.com/ira-renzo/TechToolPH/main/01-Home.png" width=600>
+<br> <br>
+<img src="https://raw.githubusercontent.com/ira-renzo/TechToolPH/main/02-Build.png" width=600>
 
 # Requirements and Dependencies
 The website made use of the MERN stack. Shown below are the modules, library, framework, etc. used:
@@ -34,14 +36,7 @@ Version | Primary Author(s) | Description of Version | Date Completed
 0.4 | Dave Galamgam, Edric Hao, Ira Ungos | Added Metrics  | 04/19/2021
 0.5 | Dave Galamgam, Edric Hao, Ira Ungos | Metrics measurement. Updated Appendix B (Group log and software metrics | 05/25/2021
 
-# Information About Contributors
-## Ira Ungos
-* Graduated Junior High School in Aguinaldo International School
-* Graduated Senior High School in DLSU Integrated School
-* Currently Studying Computer Engineering in De La Salle University
-* Likes Formula 1
-
-## Dave Galamgam
-* Likes 
-
-## Edric Hao
+# Contributors
+* Ira Ungos
+* Dave Galamgam
+* Edric Hao
